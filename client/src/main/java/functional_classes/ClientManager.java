@@ -2,7 +2,6 @@ package functional_classes;
 
 import auxiliary_classes.CommandMessage;
 import auxiliary_classes.ResponseMessage;
-import exceptions.MessageFormatException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class ClientManager {
 
     // main action
 
-    public void startNewAction(String clientInput) {
+    public ResponseMessage startNewAction(String clientInput) {
         try {
             List<String> splitedClientInput = Arrays.asList(clientInput.split("\\s+"));
             String executedCommand = splitedClientInput.get(0);
@@ -41,19 +40,17 @@ public class ClientManager {
             } else if (Objects.equals(executedCommand, "login")) {
                 login = splitedClientInput.get(splitedClientInput.size() - 2);
                 password = splitedClientInput.get(splitedClientInput.size() - 1);
-//                commandMessage = new CommandMessage<>("DBUserHandler", "isUserExists", login, password);
-//                clientSerializer.send(commandMessage);
+                commandMessage = new CommandMessage<>("DBUserHandler", "isUserExists", login, password);
+                return clientSerializer.send(commandMessage);
             } else if (Objects.equals(executedCommand, "registration")) {
                 login = splitedClientInput.get(splitedClientInput.size() - 2);
                 password = splitedClientInput.get(splitedClientInput.size() - 1);
-                commandMessage = new CommandMessage<Object>("DBUserHandler", "registration", login, password);
+                commandMessage = new CommandMessage<>("DBUserHandler", "registration", login, password);
                 ResponseMessage response = clientSerializer.send(commandMessage);
                 writer.printResponse(response);
+                return response;
             } else {
                 String param = "";
-//                if (splitedClientInput.size() <= 2) {
-//                    throw new MessageFormatException();
-//                }
                 if (splitedClientInput.size() >= 2) {
                     param = String.join(" ", splitedClientInput.subList(1, splitedClientInput.size()));
                     System.out.println(splitedClientInput.subList(1, splitedClientInput.size() - 1));
@@ -146,5 +143,52 @@ public class ClientManager {
         } catch (Exception e) {
             System.out.println("Что-то пошло не так. Проверьте корректность введеных данных");
         }
+        return null;
+    }
+
+    public ResponseMessage commandsWithoutParam(String commandName){
+        CommandMessage<Object> commandMessage;
+        switch (commandName) {
+            case ("getAllMoviesRS") -> {
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "getAllMoviesRS", login, password);
+                return clientSerializer.send(commandMessage);
+            }
+        }
+        return null;
+    }
+
+    public ResponseMessage commandsWithParam(String commandName, Object commandData){
+        CommandMessage<Object> commandMessage;
+        switch (commandName) {
+            case ("getMovieRSById") -> {
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "getMovieRSById", commandData, login, password);
+                return clientSerializer.send(commandMessage);
+            }
+            case ("add") -> {
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "addMovie", commandData, login, password);
+                return clientSerializer.send(commandMessage);
+            }
+            case ("addIfMin") -> {
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "addIfMin", commandData, login, password);
+                return clientSerializer.send(commandMessage);
+            }
+            case ("addIfMax") -> {
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "addIfMax", commandData, login, password);
+                return clientSerializer.send(commandMessage);
+            }
+            case ("update") -> {
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "updateMovie", commandData, login, password);
+                return clientSerializer.send(commandMessage);
+            }
+            case ("remove") -> {
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "removeById", commandData, login, password);
+                return clientSerializer.send(commandMessage);
+            }
+        }
+        return null;
+    }
+
+    public String getLogin() {
+        return login;
     }
 }

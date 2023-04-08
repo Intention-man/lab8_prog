@@ -53,17 +53,17 @@ public class ContainerCommonParts {
             statement.setNull(10, Types.VARCHAR);
         }
         if ((movie.getOperator().getLocation().getLocX() != null)) {
-            statement.setLong(11, (Long) movie.getOperator().getLocation().getLocX());
+            statement.setLong(11, Long.parseLong(movie.getOperator().getLocation().getLocX().toString()));
         } else {
             statement.setNull(11, Types.BIGINT);
         }
         if ((movie.getOperator().getLocation().getLocY() != null)) {
-            statement.setLong(12, (Long) movie.getOperator().getLocation().getLocY());
+            statement.setLong(12, Long.parseLong(movie.getOperator().getLocation().getLocY().toString()));
         } else {
             statement.setNull(12, Types.BIGINT);
         }
         if ((movie.getOperator().getLocation().getLocZ() != null)) {
-            statement.setDouble(13, (Double) movie.getOperator().getLocation().getLocZ());
+            statement.setDouble(13, Double.parseDouble(movie.getOperator().getLocation().getLocZ().toString()));
         } else {
             statement.setNull(13, Types.BIGINT);
         }

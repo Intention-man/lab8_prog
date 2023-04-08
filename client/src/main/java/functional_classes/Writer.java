@@ -43,7 +43,7 @@ public class Writer {
                 System.out.println("Что-то пошло не так");
             }
             else {
-                System.out.println(response.getResponseData());
+//                System.out.println(response.getResponseData());
             }
         }
     }

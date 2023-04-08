@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
+ * @deprecated
  *    Deprecated class (early, it worked with collection from xml file)
  * */
 

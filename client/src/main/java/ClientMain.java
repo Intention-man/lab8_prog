@@ -7,9 +7,25 @@ import java.net.BindException;
 import java.util.Objects;
 import java.util.Scanner;
 
+import gui.FXApplication;
+
 
 public class ClientMain {
     public static void main(String[] args) {
+        Thread t1 = new Thread(() -> {
+            FXApplication.main(args);
+        });
+        Thread t2 = new Thread(() -> {
+            while (true) {
+                consoleApp();
+            }
+        });
+
+        t2.start();
+        t1.start();
+    }
+
+    public static void consoleApp() {
         String nextLine;
         String executedCommand;
         try {
@@ -44,4 +60,5 @@ public class ClientMain {
             System.out.println(e);
         }
     }
+
 }

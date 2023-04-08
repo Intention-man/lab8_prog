@@ -5,8 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Resolved problems with registration and exit. Added some comments">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/client (1).iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/controllers/FXApplicationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/controllers/ScreenController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/MainScene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/resources/fxml/FXApplication.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/resources/images/river.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/resources/images/user_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/common (1).iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/auxiliary_classes/ResultSetWrapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/maven_project (1).iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/Server (1).iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e4c15964-6f3d-4f13-aca8-f28ec299b2f0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e4c15964-6f3d-4f13-aca8-f28ec299b2f0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/Writer.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/Writer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/others/script1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/others/script1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/others/script2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/others/script2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CommandDistributor.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CommandDistributor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/FileWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/FileWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/ContainerCommonParts.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/ContainerCommonParts.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBCollectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBCollectionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBUserHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBUserHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerSerializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/movies_classes/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/movies_classes/Movie.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +50,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="package-info" />
         <option value="Class" />
       </list>
     </option>
@@ -41,12 +76,17 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;19&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Михаил/Documents/ИТ/Актуальные лабы/lab7_prog&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Михаил/Documents/ИТ/Актуальные лабы/lab8_prog&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
@@ -68,6 +108,12 @@
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\common\src\main\java" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\server\src\main\java" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\client\src\main\java" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\resources\images" />
+      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\server\src\main\resources" />
+      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\resources" />
+      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\resources\fxml" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="" />
@@ -152,6 +198,24 @@
       <workItem from="1679495221010" duration="3214000" />
       <workItem from="1680069112672" duration="866000" />
       <workItem from="1680073324162" duration="3750000" />
+      <workItem from="1680417024077" duration="9709000" />
+      <workItem from="1680439063565" duration="4811000" />
+      <workItem from="1680447540314" duration="4175000" />
+      <workItem from="1680456193901" duration="1358000" />
+      <workItem from="1680505698524" duration="3094000" />
+      <workItem from="1680583820664" duration="2947000" />
+      <workItem from="1680587515543" duration="1473000" />
+      <workItem from="1680718692130" duration="632000" />
+      <workItem from="1680763810249" duration="13332000" />
+      <workItem from="1680791023372" duration="2688000" />
+      <workItem from="1680801212643" duration="2027000" />
+      <workItem from="1680843253318" duration="6493000" />
+      <workItem from="1680856868006" duration="4600000" />
+      <workItem from="1680868824542" duration="18266000" />
+      <workItem from="1680931568348" duration="13242000" />
+      <workItem from="1680949483768" duration="9000" />
+      <workItem from="1680951373030" duration="350000" />
+      <workItem from="1680971616235" duration="3330000" />
     </task>
     <task id="LOCAL-00001" summary="Added JDBC driver dependency">
       <created>1678457588345</created>

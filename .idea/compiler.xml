@@ -18,4 +18,9 @@
       </profile>
     </annotationProcessing>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Server" options="" />
+    </option>
+  </component>
 </project>

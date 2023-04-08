@@ -3,7 +3,9 @@ package functional_classes.commands_executors;
 import functional_classes.database.DBCollectionHandler;
 import movies_classes.Movie;
 import movies_classes.Movies;
+import org.json.JSONArray;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -89,6 +91,14 @@ public class CollectionAnalyzer {
         return (int) movies.getMoviesList().stream()
                 .filter(movie -> movie.getOscarsCount() == enteredCount)
                 .count();
+    }
+
+    public ResultSet getAllMoviesRS() throws SQLException {
+        return dbCollectionHandler.getAllMoviesRS();
+    }
+
+    public ResultSet getMovieRSById(Integer id) throws SQLException {
+        return dbCollectionHandler.getMovieRSById(id);
     }
 
     public List<String> getLast12Commands() {

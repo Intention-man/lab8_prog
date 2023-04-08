@@ -21,8 +21,14 @@
             <artifactId>common</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
-
         </dependency>
+        <dependency>
+            <groupId>javax.sql</groupId>
+            <artifactId>rowset</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <!-- https://mavenlibs.com/maven/dependency/javax.sql/rowset -->
+        
 <!--        <dependency>-->
 <!--            <groupId>com.oracle.database.jdbc</groupId>-->
 <!--            <artifactId>ojdbc8</artifactId>-->
@@ -33,6 +39,11 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
         </dependency>
     </dependencies>
 

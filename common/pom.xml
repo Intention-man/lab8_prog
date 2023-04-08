@@ -9,4 +9,12 @@
     <artifactId>common</artifactId>
     <name>Archetype - common</name>
     <url>https://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

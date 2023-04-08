@@ -3,6 +3,7 @@ package functional_classes.threads;
 import auxiliary_classes.CommandMessage;
 import auxiliary_classes.ResponseMessage;
 import functional_classes.commands_executors.CommandDistributor;
+import org.json.JSONArray;
 
 import java.io.*;
 import java.net.*;
@@ -48,10 +49,9 @@ public class ServerSerializer {
                     stage = "execute";
                 }
             }
-        }
-        catch (ClassCastException e) {
+        } catch (ClassCastException e) {
             System.out.println("Неверный тип полученных данных. Убедитесь, что сообщение с клиента приводится к классу CommandMessage");
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Прерван поток ожидания/получения данных от клиента");
         } catch (ClassNotFoundException e) {
             System.out.println("Команда, передаваемая пользователем не дошла(");
@@ -91,3 +91,4 @@ public class ServerSerializer {
         datagramChannel.close();
     }
 }
+

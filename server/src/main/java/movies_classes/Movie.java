@@ -57,14 +57,14 @@ public class Movie implements Serializable {
         System.out.println(data);
         this.id = id;
         this.name = (String) data.get(0);
-        this.coordinates = new Coordinates((Integer) data.get(1), (int) data.get(2));
+        this.coordinates = new Coordinates(Integer.parseInt(data.get(1).toString()), Integer.parseInt(data.get(2).toString()));
         this.creationDate = new Date();
-        this.oscarsCount = (long) data.get(3);
-        this.length = (long) data.get(4);
-        this.genre = (data.get(5) == null ?  null : (MovieGenre) data.get(5));
-        this.mpaaRating = (data.get(6) == null ?  null : (MpaaRating) data.get(6));
-        this.operator = new Person((String) data.get(7), (String) data.get(8), (data.get(9) == null ? null : data.get(9)),
-                new Location((data.get(10) == null ? null : data.get(10)),
+        this.oscarsCount = Long.parseLong(data.get(3).toString());
+        this.length = Long.parseLong(data.get(4).toString());
+        this.genre = (data.get(5) == null ?  null : MovieGenre.valueOf(data.get(5).toString()));
+        this.mpaaRating = (data.get(6) == null ?  null : MpaaRating.valueOf(data.get(6).toString()));
+        this.operator = new Person(data.get(7).toString(), data.get(8).toString(), (data.get(9) == null ? null : data.get(9)),
+                new Location(data.get(10) == null ? null : data.get(10),
                         (data.get(11) == null ? null : data.get(11)),
                         (data.get(12) == null ? null : data.get(12))));
         this.creator = creator;
@@ -73,14 +73,14 @@ public class Movie implements Serializable {
     public void update(HashMap data){
         System.out.println(data);
         this.name = (String) data.get(0);
-        this.coordinates = new Coordinates((Integer) data.get(1), (int) data.get(2));
+        this.coordinates = new Coordinates(Integer.parseInt((String) data.get(1)), Integer.parseInt((String) data.get(2)));
         this.creationDate = new Date();
-        this.oscarsCount = (long) data.get(3);
-        this.length = (long) data.get(4);
-        this.genre = (data.get(5) == null ?  null : (MovieGenre) data.get(5));
-        this.mpaaRating = (data.get(6) == null ?  null : (MpaaRating) data.get(6));
+        this.oscarsCount = Long.parseLong((String) data.get(3));
+        this.length = Long.parseLong((String) data.get(4));
+        this.genre = (data.get(5) == null ?  null : MovieGenre.valueOf((String) data.get(5)));
+        this.mpaaRating = (data.get(6) == null ?  null : MpaaRating.valueOf((String) data.get(6)));
         this.operator = new Person((String) data.get(7), (String) data.get(8), (data.get(9) == null ? null : data.get(9)),
-                new Location((data.get(10) == null ? null : data.get(10)),
+                new Location(data.get(10) == null ? null : data.get(10),
                         (data.get(11) == null ? null : data.get(11)),
                         (data.get(12) == null ? null : data.get(12))));
     }

@@ -8,6 +8,8 @@ import movies_classes.Location;
 import movies_classes.Movie;
 import movies_classes.Person;
 
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 import java.sql.*;
 import java.util.HashSet;
 
@@ -80,29 +82,34 @@ public class DBCollectionHandler {
         return (getMoviesCountByThisCreator(login) == 0);
     }
 
+    public synchronized ResultSet getMovieRSById(int id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM movies WHERE id=?");
+        statement.setInt(1, id);
+        ResultSet resultSet = statement.executeQuery();
+        CachedRowSet rowset = RowSetProvider.newFactory().createCachedRowSet();
+        rowset.populate(resultSet);
+        System.out.println(resultSet.getMetaData());
+        return rowset;
+    }
+
     public synchronized HashSet<Movie> getAllMovies() throws SQLException {
         HashSet<Movie> moviesList = new HashSet<>();
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM movies");
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-            Movie movie = new Movie(resultSet.getInt("id"), resultSet.getString("name"), new Coordinates(
-                    resultSet.getInt("coord_x"),
-                    resultSet.getInt("coord_y")
-            ), resultSet.getTimestamp("creation_date"), resultSet.getLong("oscars_count"), resultSet.getLong("length"),
-                    resultSet.getString("genre") != null ? MovieGenre.valueOf(resultSet.getString("genre")) : null,
-                    resultSet.getString("mpaa_rating") != null ? MpaaRating.valueOf(resultSet.getString("mpaa_rating")) : null, new Person(
-                    resultSet.getString("operator_name"),
-                    resultSet.getString("passport_id"),
-                    resultSet.getString("nationality") != null ? Country.valueOf(resultSet.getString("nationality")) : null,
-                    new Location(
-                            resultSet.getString("location_x") != null ? resultSet.getLong("location_x") : null,
-                            resultSet.getString("location_y") != null ? resultSet.getLong("location_y") : null,
-                            resultSet.getString("location_z") != null ? resultSet.getDouble("location_z") : null)),
-            resultSet.getString("creator"));
-            moviesList.add(movie);
+            moviesList.add(getMovieByResultSet(resultSet));
         }
         System.out.println(moviesList);
         return moviesList;
+    }
+
+    public synchronized ResultSet getAllMoviesRS() throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM movies");
+        ResultSet resultSet = statement.executeQuery();
+        CachedRowSet rowset = RowSetProvider.newFactory().createCachedRowSet();
+        rowset.populate(resultSet);
+        System.out.println(resultSet.getMetaData());
+        return rowset;
     }
 
 
@@ -115,6 +122,24 @@ public class DBCollectionHandler {
         PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM movies WHERE creator=?");
         statement.setString(1, login);
         return ContainerCommonParts.countQuery(statement);
+    }
+
+    public Movie getMovieByResultSet(ResultSet resultSet) throws SQLException {
+        Movie movie = new Movie(resultSet.getInt("id"), resultSet.getString("name"), new Coordinates(
+                resultSet.getInt("coord_x"),
+                resultSet.getInt("coord_y")
+        ), resultSet.getTimestamp("creation_date"), resultSet.getLong("oscars_count"), resultSet.getLong("length"),
+                resultSet.getString("genre") != null ? MovieGenre.valueOf(resultSet.getString("genre")) : null,
+                resultSet.getString("mpaa_rating") != null ? MpaaRating.valueOf(resultSet.getString("mpaa_rating")) : null, new Person(
+                resultSet.getString("operator_name"),
+                resultSet.getString("passport_id"),
+                resultSet.getString("nationality") != null ? Country.valueOf(resultSet.getString("nationality")) : null,
+                new Location(
+                        resultSet.getString("location_x") != null ? resultSet.getLong("location_x") : null,
+                        resultSet.getString("location_y") != null ? resultSet.getLong("location_y") : null,
+                        resultSet.getString("location_z") != null ? resultSet.getDouble("location_z") : null)),
+                resultSet.getString("creator"));
+        return movie;
     }
 
     public synchronized void close() throws SQLException {
