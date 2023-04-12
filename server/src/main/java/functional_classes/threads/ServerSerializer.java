@@ -3,13 +3,13 @@ package functional_classes.threads;
 import auxiliary_classes.CommandMessage;
 import auxiliary_classes.ResponseMessage;
 import functional_classes.commands_executors.CommandDistributor;
-import org.json.JSONArray;
 
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -25,6 +25,7 @@ public class ServerSerializer {
     CommandMessage deserializedCommandMessage;
     ResponseMessage<Object> response;
     private String stage = "get";
+    List<Integer> clientPortsList = new ArrayList<>();
 
 
     public ServerSerializer(CommandDistributor commandDistributor) throws IOException {
@@ -46,6 +47,7 @@ public class ServerSerializer {
                     ArrayList<Object> deserializedData = (ArrayList<Object>) ois.readObject();
                     deserializedCommandMessage = (CommandMessage) deserializedData.get(0);
                     clientPort = (Integer) deserializedData.get(1);
+                    if (!clientPortsList.contains(clientPort)) {clientPortsList.add(clientPort);}
                     stage = "execute";
                 }
             }
@@ -60,9 +62,11 @@ public class ServerSerializer {
 
     public void executeCommand() {
         // command execution
+//        System.out.println(stage);
         Object result = commandDistributor.execution(deserializedCommandMessage);
-        assert result != null;
-        response = new ResponseMessage<>(result.getClass().getName(), result);
+        System.out.println("result: " + result);
+
+        response = result != null ? new ResponseMessage<>(result.getClass().getName(), result) : new ResponseMessage<>("String", "Что-то пошло не так...");
         stage = "send";
     }
 
@@ -77,6 +81,28 @@ public class ServerSerializer {
         stage = "get";
         socketToSend.send(packet);
 //        socketToSend.close();
+    }
+
+    public void notifyAboutCollectionUpdate(){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream;
+            try {
+                objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                ResponseMessage<? extends String> notifyResponse = new ResponseMessage<>("NOTIFY", "MoviesListUpdated");
+                objectOutputStream.writeObject(notifyResponse);
+                byte[] byteBAOS = byteArrayOutputStream.toByteArray();
+                host = InetAddress.getByName("localhost");
+                clientPortsList.forEach(clientPort -> {
+                    DatagramPacket packet = new DatagramPacket(byteBAOS, byteBAOS.length, host, clientPort);
+                    try {
+                        socketToSend.send(packet);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     public String getStage() {

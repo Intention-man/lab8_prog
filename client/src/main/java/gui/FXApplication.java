@@ -5,10 +5,14 @@ import functional_classes.ClientReader;
 import functional_classes.ClientSerializer;
 import functional_classes.Writer;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.scene.Parent;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,10 +20,9 @@ import java.io.InputStream;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Objects;
-
-import javafx.fxml.FXMLLoader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FXApplication extends Application{
     Stage primaryStage;
@@ -45,10 +48,12 @@ public class FXApplication extends Application{
     @Override
     public void start(Stage primaryStage) throws SQLException, IOException {
         this.primaryStage = primaryStage;
-        currentScene = openCommandsScene();
-        primaryStage.setTitle("Movie Store");
+        primaryStage.setX(20);
+        primaryStage.setY(20);
         primaryStage.setWidth(1200);
         primaryStage.setHeight(600);
+        currentScene = setCommandsScene();
+        primaryStage.setTitle("Movie Store");
         InputStream iconStream = getClass().getResourceAsStream("/images/river.jpg");
         assert iconStream != null;
         Image image = new Image(iconStream);
@@ -69,37 +74,88 @@ public class FXApplication extends Application{
         return currentScene;
     }
 
-    public Scene openMainScene() throws SQLException {
-        MainScene mainScene = new MainScene(this, clientManager);
-        currentScene = mainScene.openScene();
-        render();
-        return currentScene;
+
+    public FlowPane navigateButtonList(){
+        Button btn1 = new Button("Страница оттображения всех фильмов на доске");
+        btn1.setOnAction(e -> setMainScene());
+        Button btn2 = new Button("Страница оттображения всех фильмов в таблице");
+        btn2.setOnAction(e -> setTableScene());
+        Button btn3 = new Button("Страница с командами");
+        btn3.setOnAction(e -> setCommandsScene());
+        Button btn4 = retUserProfileButton();
+
+        FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL, 30, 30);
+        flowPane.setLayoutX(20);
+        flowPane.setLayoutY(20);
+        flowPane.setPrefWidth(primaryStage.getWidth());
+        List<Button> buttonList = new ArrayList<>(Arrays.asList(btn1, btn2, btn3, btn4));
+        buttonList.forEach(button -> flowPane.getChildren().add(button));
+        return flowPane;
     }
 
-    public Scene openTableScene() throws SQLException, IOException {
+    public Scene setMainScene(){
+        try {
+            MoviesDisplayScene moviesDisplayScene = new MoviesDisplayScene(this, clientManager);
+            currentScene = moviesDisplayScene.openScene();
+            render();
+            return currentScene;
+        } catch (SQLException err) {
+            customizedAlert(err.getMessage()).showAndWait();
+        }
+        return null;
+    }
+
+    public Scene setTableScene(){
         TableScene tableScene = new TableScene(this, clientManager);
         currentScene = tableScene.openScene();
         render();
         return currentScene;
     }
 
-    public Scene openMovieInfoScene(int id, String creator) throws SQLException {
-        MovieInfoScene movieInfoScene = new MovieInfoScene(this, clientManager, id, creator);
-        currentScene = movieInfoScene.openScene();
-        render();
-        return currentScene;
+    public Scene setMovieInfoScene(int id, String creator){
+        try {
+            MovieInfoScene movieInfoScene = new MovieInfoScene(this, clientManager, id, creator);
+            currentScene = movieInfoScene.openScene();
+            render();
+            return currentScene;
+        } catch (SQLException err) {
+            customizedAlert(err.getMessage()).showAndWait();
+        }
+        return null;
     }
 
-    public Scene openCommandsScene() throws SQLException {
+    public Scene setCommandsScene(){
         CommandsScene commandsScene = new CommandsScene(this, clientManager);
         currentScene = commandsScene.openScene();
         render();
         return currentScene;
     }
 
+    public Button retUserProfileButton() {
+        Button userButton = new Button();
+        Image userImage = new Image("/images/user_icon.png");
+        ImageView userImageView = new ImageView(userImage);
+        userImageView.setFitHeight(50);
+        userImageView.setFitWidth(50);
+        userButton.setGraphic(userImageView);
+        userButton.setOnAction(e -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Пользователь:");
+            alert.setContentText(clientManager.getLogin());
+            alert.showAndWait();
+        });
+        return userButton;
+    }
 
-    public void changeSceneFromFXML(String fxml) throws IOException {
-        Parent pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxml)));
-        primaryStage.getScene().setRoot(pane);
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public Alert customizedAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("");
+        alert.setContentText(message);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        return alert;
     }
 }

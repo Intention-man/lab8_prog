@@ -1,23 +1,15 @@
 package gui;
 
-import auxiliary_classes.ResponseMessage;
 import functional_classes.ClientManager;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.util.Callback;
-import movies_classes.Movie;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,12 +31,12 @@ public class MovieInfoScene {
     }
 
     public Scene openScene() throws SQLException {
-        FlowPane flowPane = new FlowPane();
-        flowPane.setHgap(10);
-        flowPane.setVgap(10);
-        flowPane.setPrefWidth(1000);
-        flowPane.setPrefHeight(500);
-        flowPane.setPadding(new Insets(10));
+        FlowPane root = new FlowPane((Node) app.navigateButtonList());
+        root.setHgap(10);
+        root.setVgap(10);
+        root.setPrefWidth(1000);
+        root.setPrefHeight(500);
+        root.setPadding(new Insets(10));
         resultSet = (ResultSet) clientManager.commandsWithParam("getMovieRSById", movieId).getResponseData();
         System.out.println(resultSet.getMetaData());
 
@@ -64,7 +56,7 @@ public class MovieInfoScene {
                     gridPane.add(new Label(keysList.get(i)), 0, 0);
                     TextField textField = retTextField(i, (creator.equals(clientManager.getLogin()) && !Arrays.asList("id", "creation_date", "creator").contains(keysList.get(i))));
                     gridPane.add(textField, 1, 0);
-                    flowPane.getChildren().add(gridPane);
+                    root.getChildren().add(gridPane);
                 }
                 map.put(map.size(), movieId);
                 System.out.println("Row [1] added " + row);
@@ -72,16 +64,16 @@ public class MovieInfoScene {
 
             if (Objects.equals(creator, clientManager.getLogin())){
                 Button saveButton = retSaveButton();
-                flowPane.getChildren().add(saveButton);
+                root.getChildren().add(saveButton);
                 Button removeButton = retRemoveButton();
-                flowPane.getChildren().add(removeButton);
+                root.getChildren().add(removeButton);
             }
             Button exitButton = retExitButton();
-            flowPane.getChildren().add(exitButton);
+            root.getChildren().add(exitButton);
         } catch (SQLException ex) {
             System.out.println(ex);
         }
-        Scene scene = new Scene(flowPane, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
+        Scene scene = new Scene(root, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
         return scene;
     }
 
@@ -128,11 +120,7 @@ public class MovieInfoScene {
     public Button retExitButton(){
         Button exitButton = new Button("Выйти на главную страницу без сохранения изменений");
         exitButton.setOnAction(e -> {
-            try {
-                app.openMainScene();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
+            app.setMainScene();
         });
         return exitButton;
     }

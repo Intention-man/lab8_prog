@@ -1,6 +1,7 @@
 package functional_classes.commands_executors;
 
 import functional_classes.database.DBCollectionHandler;
+import functional_classes.threads.ServerSerializer;
 import movies_classes.Movie;
 import movies_classes.Movies;
 import org.json.JSONArray;
@@ -16,7 +17,7 @@ import java.util.*;
 public class CollectionAnalyzer {
 
     // initialization
-
+    ServerSerializer serverSerializer;
     private Movies movies;
     private DBCollectionHandler dbCollectionHandler;
     private List<String> commandsHistory = new ArrayList<>();
@@ -72,18 +73,24 @@ public class CollectionAnalyzer {
             System.out.println(movies.getMoviesList().size());
             movies.getMoviesList().add(newMovie);
             System.out.println(movies.getMoviesList().size());
+            serverSerializer.notifyAboutCollectionUpdate();
             return "Успех!";
         } else {
             return response;
         }
     }
 
-    public boolean clear() throws SQLException {
+    public String clear() throws SQLException {
         if (dbCollectionHandler.clearCollection(login)) {
-            movies.getMoviesList().clear();
-            return true;
+            movies.getMoviesList().forEach(movie -> {
+                if (Objects.equals(movie.getCreator(), login)){
+                    movies.getMoviesList().remove(movie);
+                }
+            });
+            serverSerializer.notifyAboutCollectionUpdate();
+            return "Успешно удалены все фильмы, созданные вами";
         } else {
-            return false;
+            return "Ошибка базы данных при удалении";
         }
     }
 
@@ -95,6 +102,13 @@ public class CollectionAnalyzer {
 
     public ResultSet getAllMoviesRS() throws SQLException {
         return dbCollectionHandler.getAllMoviesRS();
+    }
+
+    public ResultSet getDigitFilteredMoviesRS(String condition) {
+        return dbCollectionHandler.getDigitFilteredMoviesRS(condition);
+    }
+    public ResultSet getSubstringFilteredMoviesRS(String condition) {
+        return dbCollectionHandler.getSubstringFilteredMoviesRS(condition);
     }
 
     public ResultSet getMovieRSById(Integer id) throws SQLException {
@@ -125,13 +139,14 @@ public class CollectionAnalyzer {
     public String removeById(Integer enteredId) throws SQLException {
         if (movies.getMoviesList().stream()
                 .anyMatch(movie -> movie.getId() == enteredId)) {
-            Movie foundMovie = (Movie) movies.getMoviesList().stream()
+            Movie foundMovie = movies.getMoviesList().stream()
                     .filter(movie -> movie.getId() == enteredId)
                     .findAny().get();
             if (Objects.equals(foundMovie.getCreator(), login)) {
                 if (dbCollectionHandler.removeMovie(enteredId)) {
                     movies.getMoviesList().remove(foundMovie);
-                    return "Успешно удалено";
+                    serverSerializer.notifyAboutCollectionUpdate();
+                    return "Фильм " + foundMovie.getName() + " удален";
                 }
                 return "Ошибка при удалении";
             } else {
@@ -152,6 +167,7 @@ public class CollectionAnalyzer {
                 if (dbCollectionHandler.removeMovie(foundMovie.getId())) {
                     String name = foundMovie.getName();
                     movies.getMoviesList().remove(foundMovie);
+                    serverSerializer.notifyAboutCollectionUpdate();
                     return "Фильм " + name + " удален";
                 }
                 return "Ошибка при удалении";
@@ -184,6 +200,7 @@ public class CollectionAnalyzer {
             if (Objects.equals(foundMovie.getCreator(), login)) {
                 if (dbCollectionHandler.updateMovie(newMovie)) {
                     foundMovie.update(data);
+                    serverSerializer.notifyAboutCollectionUpdate();
                     return "Успешно обновлено";
                 }
                 return "Обновление не удалось";
@@ -197,5 +214,9 @@ public class CollectionAnalyzer {
 
     public void setCurrentLogin(String login) {
         this.login = login;
+    }
+
+    public void setServerSerializer(ServerSerializer serverSerializer){
+        this.serverSerializer = serverSerializer;
     }
 }

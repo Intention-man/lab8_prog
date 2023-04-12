@@ -4,43 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Resolved problems with registration and exit. Added some comments">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/client (1).iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/controllers/FXApplicationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/controllers/ScreenController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/MainScene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/resources/fxml/FXApplication.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/resources/images/river.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/resources/images/user_icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/common (1).iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/common/src/main/java/auxiliary_classes/ResultSetWrapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/maven_project (1).iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/Server (1).iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e4c15964-6f3d-4f13-aca8-f28ec299b2f0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/e4c15964-6f3d-4f13-aca8-f28ec299b2f0.xml" afterDir="false" />
+    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Second commit. Remain Local">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/controllers/FXApplicationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/controllers/ScreenController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/Writer.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/Writer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/others/script1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/others/script1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/others/script2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/others/script2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientSerializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/MainScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/others/script1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/others/script1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/others/script2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/others/script2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CommandDistributor.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CommandDistributor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/FileWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/FileWorker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/ContainerCommonParts.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/ContainerCommonParts.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBCollectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBCollectionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBUserHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBUserHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/movies_classes/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/movies_classes/Movie.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +74,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.build&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
@@ -215,7 +198,13 @@
       <workItem from="1680931568348" duration="13242000" />
       <workItem from="1680949483768" duration="9000" />
       <workItem from="1680951373030" duration="350000" />
-      <workItem from="1680971616235" duration="3330000" />
+      <workItem from="1680971616235" duration="6878000" />
+      <workItem from="1681021422671" duration="16554000" />
+      <workItem from="1681042166338" duration="5043000" />
+      <workItem from="1681192325185" duration="14046000" />
+      <workItem from="1681212031170" duration="5083000" />
+      <workItem from="1681217139123" duration="738000" />
+      <workItem from="1681219364349" duration="1929000" />
     </task>
     <task id="LOCAL-00001" summary="Added JDBC driver dependency">
       <created>1678457588345</created>
@@ -259,7 +248,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679498431107</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="First commit">
+      <created>1680975543566</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1680975543566</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,7 +278,8 @@
     <MESSAGE value="Most necessary have done" />
     <MESSAGE value="Finished all necessary task points. Maybe some addition updates will be soon" />
     <MESSAGE value="Resolved problems with registration and exit. Added some comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="Resolved problems with registration and exit. Added some comments" />
+    <MESSAGE value="First commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="First commit" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

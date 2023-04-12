@@ -46,6 +46,7 @@ public class Server {
 
             ServerReader serverReader = new ServerReader(commandDistributor);
             serverSerializer = new ServerSerializer(commandDistributor);
+            collectionAnalyzer.setServerSerializer(serverSerializer);
 
             Thread t1 = new Thread(() -> {
                 try {
@@ -76,6 +77,7 @@ public class Server {
             executor.submit(() -> {
                         if (Objects.equals(serverSerializer.getStage(), "execute")) {
                             serverSerializer.executeCommand();
+                            System.out.println(serverSerializer.getStage());
                             forkJoinPool.submit(() -> {
                                 try {
                                     serverSerializer.sendResponse();

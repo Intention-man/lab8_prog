@@ -37,7 +37,7 @@ public class ClientReader {
     }
 
     public ClientReader() {
-        scannerList = new ArrayList<Scanner>();
+        scannerList = new ArrayList<>();
         scannerList.add(new Scanner(System.in));
         chosenScanner = scannerList.get(0);
     }
@@ -179,7 +179,7 @@ public class ClientReader {
                 chosenScanner = scannerList.get(scannerList.size() - 1);
             }
         } catch (Exception ex) {
-            System.out.println(ex);
+            System.out.println(ex.getMessage());
         }
     }
 

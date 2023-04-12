@@ -65,7 +65,7 @@ public class CommandDistributor {
                  InvocationTargetException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return (T) "Что-то пошло не так...";
         } catch (AuthorizationException ignored) {
         }
         return null;

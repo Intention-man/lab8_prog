@@ -53,6 +53,8 @@ public class ClientSerializer {
             byteBAOS = new byte[1024 * 16];
             DatagramPacket packet = new DatagramPacket(byteBAOS, byteBAOS.length);
             socket.setSoTimeout(15000);
+
+            // getting
             socket.receive(packet);
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(packet.getData());
 

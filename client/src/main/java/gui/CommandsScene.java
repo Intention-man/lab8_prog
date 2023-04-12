@@ -1,32 +1,35 @@
 package gui;
 
-import auxiliary_classes.CommandMessage;
 import auxiliary_classes.FormField;
 import enums.Country;
 import enums.MovieGenre;
 import enums.MpaaRating;
 import functional_classes.ClientManager;
+import functional_classes.ClientReader;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import movies_classes.Movie;
+import movies_classes.Movies;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
 public class CommandsScene {
     FXApplication app;
-    FlowPane flowPane;
+    FlowPane root;
     ClientManager clientManager;
+    ClientReader clientReader;
     static ArrayList<FormField> form = new ArrayList<>();
     static HashMap<Integer, Object> answers = new HashMap<>();
-    CommandMessage<Object> commandMessage;
     int step = 0;
 
     static {
@@ -48,22 +51,19 @@ public class CommandsScene {
     public CommandsScene(FXApplication app, ClientManager clientManager) {
         this.app = app;
         this.clientManager = clientManager;
+        clientReader = new ClientReader();
     }
 
     public Scene openScene() {
         clientManager.startNewAction("login 88 88");
-        flowPane = new FlowPane();
-        flowPane.setHgap(10);
-        flowPane.setVgap(10);
-        flowPane.setPrefWidth(1000);
-        flowPane.setPrefHeight(500);
-        flowPane.setPadding(new Insets(10));
+        root = new FlowPane(Orientation.VERTICAL, 30.0, 30.0, app.navigateButtonList());
 
         List<Button> buttonList = retButtonList();
-        buttonList.forEach(button -> flowPane.getChildren().add(button));
-
-        Scene scene = new Scene(flowPane, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
-        return scene;
+        FlowPane buttonContainer = new FlowPane(Orientation.HORIZONTAL, 30.0, 30.0);
+        buttonContainer.setPrefWidth(app.getPrimaryStage().getWidth());
+        buttonList.forEach(button -> buttonContainer.getChildren().add(button));
+        root.getChildren().add(buttonContainer);
+        return new Scene(root, 100, 50, Color.rgb(240, 217, 164));
     }
 
     public List<Button> retButtonList() {
@@ -71,8 +71,22 @@ public class CommandsScene {
         buttonList.add(retAddButton());
         buttonList.add(retAddIfMinButton());
         buttonList.add(retAddIfMaxButton());
+        buttonList.add(retUpdateButton());
+        buttonList.add(retHelpButton());
+        buttonList.add(retInfoButton());
+        buttonList.add(retShowButton());
+        buttonList.add(retRemoveByIdButton());
+        buttonList.add(retRemoveByOscarsCountButton());
+        buttonList.add(retClearButton());
+        buttonList.add(retHistoryButton());
+        buttonList.add(retSumOfLengthButton());
+        buttonList.add(retCountByOscarsCountButton());
+        buttonList.add(retExecuteFileButton());
+        buttonList.add(retExitButton());
         return buttonList;
     }
+
+    // POST commands
 
     public Button retAddButton() {
         Button addButton = new Button("add");
@@ -101,6 +115,171 @@ public class CommandsScene {
         return addButton;
     }
 
+    public Button retUpdateButton() {
+        Button updateButton = new Button("Изменить фильм");
+        updateButton.setOnAction(e -> {
+            List<Movie> moviesList = ((Movies) clientManager.commandsWithoutParam("getMovies").getResponseData()).getSortedMovies("name");
+            ToggleGroup group = new ToggleGroup();
+            moviesList.forEach(movie -> {
+                System.out.println(movie.getName() + " " + movie.getCreator());
+                RadioButton rBtn = new RadioButton(movie.getName());
+                rBtn.setToggleGroup(group);
+                root.getChildren().add(rBtn);
+                rBtn.setOnAction(event -> {
+                    app.setMovieInfoScene(movie.getId(), movie.getCreator());
+                });
+            });
+        });
+        return updateButton;
+    }
+    
+    public Button retRemoveByIdButton(){
+        Button button = new Button("removeById");
+        button.setOnAction(e -> {
+            Label label = new Label("Введите id фильма, который хотите удалить");
+            TextField textField = new TextField();
+            Button delButton = new Button("Удалить");
+            FlowPane group = new FlowPane();
+            group.getChildren().add(label);
+            group.getChildren().add(textField);
+            group.getChildren().add(delButton);
+            root.getChildren().add(group);
+            delButton.setOnAction(e2 -> {
+                try{
+                    int id = Integer.parseInt(textField.getText().trim());
+                    app.customizedAlert((String) clientManager.commandsWithParam("removeById", id).getResponseData()).showAndWait();
+                } catch (Exception err){
+                    app.customizedAlert("Вы ввели некорректное значение id. Повторите попытку").showAndWait();
+                }
+            });
+        });
+        return button;
+    }
+
+    public Button retRemoveByOscarsCountButton(){
+        Button button = new Button("removeByOscarsCount");
+        button.setOnAction(e -> {
+            Label label = new Label("Введите количество оскаров - удалится случайный фильм с таким количеством (если есть хотя бы 1 такой фильм)");
+            TextField textField = new TextField();
+            Button delButton = new Button("Удалить");
+            FlowPane group = new FlowPane();
+            group.getChildren().add(label);
+            group.getChildren().add(textField);
+            group.getChildren().add(delButton);
+            root.getChildren().add(group);
+            delButton.setOnAction(e2 -> {
+                try{
+                    long oscarsCount = Long.parseLong(textField.getText().trim());
+                    app.customizedAlert((String) clientManager.commandsWithParam("removeByOscarsCount", oscarsCount).getResponseData()).showAndWait();
+                } catch (Exception err){
+                    app.customizedAlert("Вы ввели некорректное количество оскаров. Повторите попытку").showAndWait();
+                }
+            });
+        });
+        return button;
+    }
+
+    public Button retClearButton() {
+        Button button = new Button("clear");
+        button.setOnAction(e -> {
+            step = 0;
+            app.customizedAlert(clientManager.commandsWithoutParam("clear").getResponseData().toString()).showAndWait();
+        });
+        return button;
+    }
+
+    // GET commands
+
+    public Button retHelpButton() {
+        Button button = new Button("help");
+        button.setOnAction(e -> {
+            app.customizedAlert(clientManager.noRSCommands("help")).showAndWait();
+        });
+        return button;
+    }
+
+    public Button retInfoButton() {
+        Button button = new Button("info");
+        button.setOnAction(e -> {
+            app.customizedAlert(clientManager.noRSCommands("info")).showAndWait();
+        });
+        return button;
+    }
+
+    public Button retHistoryButton() {
+        Button button = new Button("history");
+        button.setOnAction(e -> {
+            app.customizedAlert(clientManager.noRSCommands("history")).showAndWait();
+        });
+        return button;
+    }
+
+    public Button retShowButton() {
+        Button button = new Button("show");
+        button.setOnAction(e -> {
+            app.setTableScene();
+        });
+        return button;
+    }
+
+    public Button retSumOfLengthButton() {
+        Button button = new Button("sumOfLength");
+        button.setOnAction(e -> {
+            app.customizedAlert("Суммарная длина всех фильмов в коллекции: " + clientManager.noRSCommands("sumOfLength")).showAndWait();
+        });
+        return button;
+    }
+
+    public Button retCountByOscarsCountButton(){
+        Button button = new Button("countByOscarsCount");
+        button.setOnAction(e -> {
+            Label label = new Label("Введите количество оскаров - выведется количество фильмов с таким количеством оскаров");
+            TextField textField = new TextField();
+            Button getButton = new Button("Узнать количество подходящих фильмов");
+            FlowPane group = new FlowPane();
+            group.getChildren().add(label);
+            group.getChildren().add(textField);
+            group.getChildren().add(getButton);
+            root.getChildren().add(group);
+            getButton.setOnAction(e2 -> {
+                try{
+                    long oscarsCount = Long.parseLong(textField.getText().trim());
+                    app.customizedAlert("Такое количество оскаров имеет(-ют): " + clientManager.commandsWithParam("countByOscarsCount", oscarsCount).getResponseData().toString() + " фильмов").showAndWait();
+                } catch (Exception err){
+                    app.customizedAlert(err.getMessage()).showAndWait();
+                }
+            });
+        });
+        return button;
+    }
+
+    // DO commands
+
+    public Button retExecuteFileButton() {
+        Button button = new Button("executeFile");
+        button.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File selectedFile = fileChooser.showOpenDialog(app.getPrimaryStage());
+            if (selectedFile != null) {
+                clientManager.startReadFile(selectedFile.getAbsolutePath());
+            }
+        });
+        return button;
+    }
+
+    public Button retExitButton() {
+        Button button = new Button("exit");
+        button.setOnAction(e -> {
+            System.exit(0);
+        });
+        return button;
+    }
+
+
+
+    // not buttons
+    
     public void readInputNewMovieData(String commandName) {
         Button nextStep = new Button("Далее");
         if (step < form.size()) {
@@ -110,28 +289,24 @@ public class CommandsScene {
             group.getChildren().add(label);
             group.getChildren().add(textField);
             group.getChildren().add(nextStep);
-            flowPane.getChildren().add(group);
+            root.getChildren().add(group);
             nextStep.setOnAction(e -> {
                 String line = textField.getText();
                 validate(line, step);
                 readInputNewMovieData(commandName);
-                flowPane.getChildren().remove(group);
+                root.getChildren().remove(group);
             });
         } else {
             nextStep.setText("Создать фильм!");
-            customizedAlert(clientManager.commandsWithParam(commandName, answers).getResponseData().toString()).showAndWait();
+            app.customizedAlert(clientManager.commandsWithParam(commandName, answers).getResponseData().toString()).showAndWait();
         }
     }
 
     public void validate(String line, int nextStep) {
         try {
-//            if (line.equals("exit")) {
-//                System.exit(0);
-//            }
             if (line.length() == 0 && form.get(nextStep).getIsNecessary()) {
                 System.out.println("Значение не может быть пустым");
                 return;
-
             } else {
                 if (line.length() == 0) {
                     answers.put(nextStep, null);
@@ -201,10 +376,4 @@ public class CommandsScene {
         step = nextStep;
     }
 
-    public Alert customizedAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(message);
-        alert.setContentText(clientManager.getLogin());
-        return alert;
-    }
 }

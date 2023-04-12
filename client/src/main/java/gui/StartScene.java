@@ -29,7 +29,7 @@ public class StartScene {
     }
 
     public Scene common() {
-        GridPane authorLayout = new GridPane();
+        GridPane root = new GridPane();
 
         usernameLabel = new Label("Username:");
         usernameField = new TextField();
@@ -41,19 +41,19 @@ public class StartScene {
             this.common();
         });
 
-        authorLayout.setHgap(10);
-        authorLayout.setVgap(10);
-        authorLayout.setPadding(new Insets(10));
-        authorLayout.add(usernameLabel, 0, 0);
-        authorLayout.add(usernameField, 1, 0);
-        authorLayout.add(passwordLabel, 0, 1);
-        authorLayout.add(passwordField, 1, 1);
+        root.setHgap(10);
+        root.setVgap(10);
+        root.setPadding(new Insets(10));
+        root.add(usernameLabel, 0, 0);
+        root.add(usernameField, 1, 0);
+        root.add(passwordLabel, 0, 1);
+        root.add(passwordField, 1, 1);
 
         HBox buttonLayout = new HBox(10);
         buttonLayout.getChildren().add(Objects.equals(mode, "L") ? authorization() : registration());
-        authorLayout.add(buttonLayout, 1, 2);
-        authorLayout.add(changeModBtn, 2, 2);
-        Scene scene = new Scene(authorLayout, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
+        root.add(buttonLayout, 1, 2);
+        root.add(changeModBtn, 2, 2);
+        Scene scene = new Scene(root, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
         return scene;
     }
 
@@ -65,11 +65,7 @@ public class StartScene {
             String password = passwordField.getText();
             ResponseMessage responseMessage = clientManager.startNewAction("login " + username + " " + password);
             if (responseMessage.getResponseData().equals(true)) {
-                try {
-                    app.openTableScene();
-                } catch (SQLException | IOException e) {
-                    throw new RuntimeException(e);
-                }
+                app.setTableScene();
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, (String) responseMessage.getResponseData());
                 alert.showAndWait();

@@ -1,5 +1,5 @@
-info 88 88
-add  88 88
+info
+add
 Название 0
 12893
 11
@@ -13,5 +13,5 @@ SOUTH_KOREA
 1298
 -8
 1.0001
-execute_script C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\client\src\main\java\others\script1.txt 88 88
-show 88 88
+execute_script C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\resources\others\script1.txt
+show

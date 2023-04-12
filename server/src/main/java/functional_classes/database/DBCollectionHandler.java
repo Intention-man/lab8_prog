@@ -11,7 +11,8 @@ import movies_classes.Person;
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import java.sql.*;
-import java.util.HashSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DBCollectionHandler {
     Connection connection;
@@ -88,8 +89,33 @@ public class DBCollectionHandler {
         ResultSet resultSet = statement.executeQuery();
         CachedRowSet rowset = RowSetProvider.newFactory().createCachedRowSet();
         rowset.populate(resultSet);
-        System.out.println(resultSet.getMetaData());
         return rowset;
+    }
+
+    public synchronized ResultSet getDigitFilteredMoviesRS(String condition) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM movies WHERE " + condition);
+            ResultSet resultSet = statement.executeQuery();
+            CachedRowSet rowset = RowSetProvider.newFactory().createCachedRowSet();
+            rowset.populate(resultSet);
+            return rowset;
+        } catch (SQLException err) {
+            System.out.println(err.getMessage());
+            return null;
+        }
+    }
+
+    public synchronized ResultSet getSubstringFilteredMoviesRS(String condition) {
+        try {
+            List<String> list = Arrays.asList(condition.split(" "));
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM movies WHERE " + list.get(0) +" LIKE " + "'%" + list.get(1) + "%'");
+            ResultSet resultSet = statement.executeQuery();
+            CachedRowSet rowset = RowSetProvider.newFactory().createCachedRowSet();
+            rowset.populate(resultSet);
+            return rowset;
+        } catch (SQLException err) {
+            return null;
+        }
     }
 
     public synchronized HashSet<Movie> getAllMovies() throws SQLException {
@@ -100,7 +126,8 @@ public class DBCollectionHandler {
             moviesList.add(getMovieByResultSet(resultSet));
         }
         System.out.println(moviesList);
-        return moviesList;
+
+        return moviesList.stream().sorted(Comparator.comparing(Movie::getCreator)).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public synchronized ResultSet getAllMoviesRS() throws SQLException {
