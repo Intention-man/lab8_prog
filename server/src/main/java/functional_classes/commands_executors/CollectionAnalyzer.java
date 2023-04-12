@@ -115,16 +115,21 @@ public class CollectionAnalyzer {
         return dbCollectionHandler.getMovieRSById(id);
     }
 
-    public List<String> getLast12Commands() {
+    public String getLast12Commands() {
         System.out.println("print all:" + commandsHistory);
-        return new ArrayList<String>(commandsHistory.subList(commandsHistory.size() >= 12 ? commandsHistory.size() - 12 : 0, commandsHistory.size()));
+        StringBuilder message = new StringBuilder();
+        ArrayList list = new ArrayList<String>(commandsHistory.subList(commandsHistory.size() >= 12 ? commandsHistory.size() - 12 : 0, commandsHistory.size()));
+        for (var str : list) {
+            message.append(str).append("\n");
+        }
+        return message.toString();
     }
 
     public Movies getMovies() {
         return movies;
     }
 
-    public List<String> info() {
+    public String info() {
         System.out.println("info!!!");
         ArrayList<String> answer = new ArrayList<>();
         answer.add("Класс элементов коллекции: " + (movies.getMoviesList().size() > 0 ? movies.getMoviesList().stream().toList().get(0).getClass() : "Movie"));
@@ -133,7 +138,12 @@ public class CollectionAnalyzer {
         answer.add("Список имеющихся в коллекции фильмов (id + название)");
         movies.getSortedMovies("name")
                 .forEach(movie -> answer.add(movie.getId() + " - " + movie.getName()));
-        return answer;
+        StringBuilder message = new StringBuilder();
+        for (var str : answer) {
+            message.append(str).append("\n");
+        }
+        return message.toString();
+//        return answer;
     }
 
     public String removeById(Integer enteredId) throws SQLException {

@@ -179,21 +179,22 @@ public class ClientManager {
             }
             case ("info") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "info", login, password);
-                ArrayList<String> answer = (ArrayList<String>) clientSerializer.send(commandMessage).getResponseData();
-                StringBuilder message = new StringBuilder();
-                for (var str : answer) {
-                    message.append(str).append("\n");
-                }
-                return message.toString();
+                clientSerializer.send(commandMessage);
+//                ArrayList<String> answer = (ArrayList<String>) clientSerializer.send(commandMessage).getResponseData();
+//                while (!clientSerializer.isReadyToReturnMessage()){
+//                    int t = 0;
+//                }
+
             }
             case ("history") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "getLast12Commands", login, password);
-                ArrayList<String> answer = (ArrayList<String>) clientSerializer.send(commandMessage).getResponseData();
-                StringBuilder message = new StringBuilder();
-                for (var str : answer) {
-                    message.append(str).append("\n");
-                }
-                return message.toString();
+                clientSerializer.send(commandMessage);
+//                ArrayList<String> answer = (ArrayList<String>) clientSerializer.send(commandMessage).getResponseData();
+//                StringBuilder message = new StringBuilder();
+//                for (var str : answer) {
+//                    message.append(str).append("\n");
+//                }
+//                return message.toString();
             }
             case ("sumOfLength") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "sumOfLength", login, password);

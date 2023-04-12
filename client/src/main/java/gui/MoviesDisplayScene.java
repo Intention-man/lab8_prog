@@ -40,7 +40,10 @@ public class MoviesDisplayScene {
 
     public Scene openScene() throws SQLException {
         clientManager.startNewAction("login 88 88");
-        ResponseMessage response = clientManager.commandsWithoutParam("getAllMoviesRS");
+        clientManager.commandsWithoutParam("getAllMoviesRS");
+        while (!app.clientSerializer.isReadyToReturnMessage()){}
+        ResponseMessage response = app.clientSerializer.newResponse;
+        app.clientSerializer.setReadyToReturnMessage(false);
         ResultSet resultSet = (ResultSet) response.getResponseData();
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);

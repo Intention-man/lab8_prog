@@ -15,13 +15,13 @@ public class ClientMain {
         Thread t1 = new Thread(() -> {
             FXApplication.main(args);
         });
-        Thread t2 = new Thread(() -> {
-            while (true) {
-                consoleApp();
-            }
-        });
+//        Thread t2 = new Thread(() -> {
+//            while (true) {
+//                consoleApp();
+//            }
+//        });
 
-        t2.start();
+//        t2.start();
         t1.start();
     }
 

@@ -31,6 +31,7 @@ public class CommandsScene {
     static ArrayList<FormField> form = new ArrayList<>();
     static HashMap<Integer, Object> answers = new HashMap<>();
     int step = 0;
+    String alertText;
 
     static {
         form.add(new FormField(0, "String", true, "Введите название фильма"));
@@ -201,7 +202,7 @@ public class CommandsScene {
     public Button retInfoButton() {
         Button button = new Button("info");
         button.setOnAction(e -> {
-            app.customizedAlert(clientManager.noRSCommands("info")).showAndWait();
+            clientManager.noRSCommands("info");
         });
         return button;
     }
@@ -375,5 +376,6 @@ public class CommandsScene {
         }
         step = nextStep;
     }
+
 
 }

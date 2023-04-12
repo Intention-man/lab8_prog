@@ -1,10 +1,12 @@
 package gui;
 
+import auxiliary_classes.ResponseMessage;
 import functional_classes.ClientManager;
 import functional_classes.ClientReader;
 import functional_classes.ClientSerializer;
 import functional_classes.Writer;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,38 +17,48 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.net.BindException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class FXApplication extends Application{
     Stage primaryStage;
     static ClientManager clientManager;
     Scene currentScene;
+    ClientReader reader = new ClientReader();
+    Writer writer = new Writer();
+    int port;
+    ClientSerializer clientSerializer;
+
 
     public static void main(String[] args) {
-        ClientReader reader = new ClientReader();
-        Writer writer = new Writer();
-        int port;
-        ClientSerializer clientSerializer;
-        port = 5000;
+        Application.launch();
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
         try {
-            clientSerializer = new ClientSerializer(port);
+            port = 5000;
+            while (true){
+                try {
+                    port += 1;
+                    clientSerializer = new ClientSerializer(port);
+                    break;
+                } catch (BindException ignored) {
+                }
+            }
+            System.out.println(port);
+
+
+            clientSerializer.setApp(this);
             clientManager = new ClientManager(clientSerializer, reader, writer);
             reader.setClientManager(clientManager);
         } catch (SocketException | UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        Application.launch();
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws SQLException, IOException {
         this.primaryStage = primaryStage;
         primaryStage.setX(20);
         primaryStage.setY(20);
@@ -59,6 +71,13 @@ public class FXApplication extends Application{
         Image image = new Image(iconStream);
         primaryStage.getIcons().add(image);
         render();
+
+        Thread t2 = new Thread(() -> {
+            while (true) {
+                clientSerializer.getAndReturnMessageLoop();
+            }
+        });
+        t2.start();
     }
 
     public void render() {
@@ -73,7 +92,6 @@ public class FXApplication extends Application{
         render();
         return currentScene;
     }
-
 
     public FlowPane navigateButtonList(){
         Button btn1 = new Button("Страница оттображения всех фильмов на доске");
@@ -158,4 +176,15 @@ public class FXApplication extends Application{
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         return alert;
     }
+
+    public ClientSerializer getClientSerializer() {
+        return clientSerializer;
+    }
+
+    public void changed(ObservableValue<? extends String> prop,
+                        String oldValue,
+                        String newValue) {
+        customizedAlert(newValue).showAndWait();
+    }
+
 }

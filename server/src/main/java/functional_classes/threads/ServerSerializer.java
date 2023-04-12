@@ -79,6 +79,7 @@ public class ServerSerializer {
         host = InetAddress.getByName("localhost");
         DatagramPacket packet = new DatagramPacket(byteBAOS, byteBAOS.length, host, clientPort);
         stage = "get";
+        System.out.println("notifyAboutCollectionUpdate " + clientPort);
         socketToSend.send(packet);
 //        socketToSend.close();
     }
@@ -92,9 +93,10 @@ public class ServerSerializer {
                 objectOutputStream.writeObject(notifyResponse);
                 byte[] byteBAOS = byteArrayOutputStream.toByteArray();
                 host = InetAddress.getByName("localhost");
-                clientPortsList.forEach(clientPort -> {
-                    DatagramPacket packet = new DatagramPacket(byteBAOS, byteBAOS.length, host, clientPort);
+                clientPortsList.forEach(port -> {
+                    DatagramPacket packet = new DatagramPacket(byteBAOS, byteBAOS.length, host, port);
                     try {
+                        System.out.println("notifyAboutCollectionUpdate " + port);
                         socketToSend.send(packet);
                     } catch (IOException e) {
                         e.printStackTrace();
