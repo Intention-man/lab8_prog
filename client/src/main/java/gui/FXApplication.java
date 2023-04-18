@@ -1,16 +1,18 @@
 package gui;
 
-import auxiliary_classes.ResponseMessage;
 import functional_classes.ClientManager;
 import functional_classes.ClientReader;
 import functional_classes.ClientSerializer;
 import functional_classes.Writer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -24,7 +26,7 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.*;
 
-public class FXApplication extends Application{
+public class FXApplication extends Application {
     Stage primaryStage;
     static ClientManager clientManager;
     Scene currentScene;
@@ -42,7 +44,7 @@ public class FXApplication extends Application{
     public void start(Stage primaryStage) {
         try {
             port = 5000;
-            while (true){
+            while (true) {
                 try {
                     port += 1;
                     clientSerializer = new ClientSerializer(port);
@@ -51,7 +53,6 @@ public class FXApplication extends Application{
                 }
             }
             System.out.println(port);
-
 
             clientSerializer.setApp(this);
             clientManager = new ClientManager(clientSerializer, reader, writer);
@@ -74,10 +75,42 @@ public class FXApplication extends Application{
 
         Thread t2 = new Thread(() -> {
             while (true) {
-                clientSerializer.getAndReturnMessageLoop();
+                String answer = clientSerializer.getAndReturnMessageLoop();
+                if (Objects.equals(answer, "U")) {
+                    System.out.println("inside task");
+                    render();
+                }
             }
         });
         t2.start();
+
+//        Task<Void> task = new Task<>() {
+//            @Override public Void call() {
+//                while (true) {
+//                    String answer = clientSerializer.getAndReturnMessageLoop();
+//                    if (Objects.equals(answer, "U")) {
+//                        System.out.println("inside task");
+//                        render();
+//                    }
+//                }
+//            }
+//        };
+//        ProgressBar bar = new ProgressBar();
+//        bar.progressProperty().bind(task.progressProperty());
+//        new Thread(task).start();
+
+//        Platform.runLater(() -> {
+//            while (true) {
+//                String answer = clientSerializer.getAndReturnMessageLoop();
+//                if (Objects.equals(answer, "U")) {
+//                    render();
+//                }
+//            }
+//        });
+//        Thread t2 = new Thread(() -> {
+//
+//        });
+//        t2.start();
     }
 
     public void render() {
@@ -93,7 +126,7 @@ public class FXApplication extends Application{
         return currentScene;
     }
 
-    public FlowPane navigateButtonList(){
+    public FlowPane navigateButtonList() {
         Button btn1 = new Button("Страница оттображения всех фильмов на доске");
         btn1.setOnAction(e -> setMainScene());
         Button btn2 = new Button("Страница оттображения всех фильмов в таблице");
@@ -111,7 +144,7 @@ public class FXApplication extends Application{
         return flowPane;
     }
 
-    public Scene setMainScene(){
+    public Scene setMainScene() {
         try {
             MoviesDisplayScene moviesDisplayScene = new MoviesDisplayScene(this, clientManager);
             currentScene = moviesDisplayScene.openScene();
@@ -123,14 +156,14 @@ public class FXApplication extends Application{
         return null;
     }
 
-    public Scene setTableScene(){
+    public Scene setTableScene() {
         TableScene tableScene = new TableScene(this, clientManager);
         currentScene = tableScene.openScene();
         render();
         return currentScene;
     }
 
-    public Scene setMovieInfoScene(int id, String creator){
+    public Scene setMovieInfoScene(int id, String creator) {
         try {
             MovieInfoScene movieInfoScene = new MovieInfoScene(this, clientManager, id, creator);
             currentScene = movieInfoScene.openScene();
@@ -142,7 +175,7 @@ public class FXApplication extends Application{
         return null;
     }
 
-    public Scene setCommandsScene(){
+    public Scene setCommandsScene() {
         CommandsScene commandsScene = new CommandsScene(this, clientManager);
         currentScene = commandsScene.openScene();
         render();

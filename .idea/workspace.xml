@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Third commit. Remain auto updating client data and locals">
+    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Problems with multithreading">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/threads/ServerSerializer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,7 +191,8 @@
       <workItem from="1681217139123" duration="738000" />
       <workItem from="1681219364349" duration="1929000" />
       <workItem from="1681277696467" duration="3107000" />
-      <workItem from="1681283342766" duration="8995000" />
+      <workItem from="1681283342766" duration="10262000" />
+      <workItem from="1681793379558" duration="4779000" />
     </task>
     <task id="LOCAL-00001" summary="Added JDBC driver dependency">
       <created>1678457588345</created>
@@ -254,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681278014688</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Problems with multithreading">
+      <created>1681292416171</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1681292416171</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,27 +282,10 @@
     <MESSAGE value="Resolved problems with registration and exit. Added some comments" />
     <MESSAGE value="First commit" />
     <MESSAGE value="Third commit. Remain auto updating client data and locals" />
-    <option name="LAST_COMMIT_MESSAGE" value="Third commit. Remain auto updating client data and locals" />
+    <MESSAGE value="Problems with multithreading" />
+    <option name="LAST_COMMIT_MESSAGE" value="Problems with multithreading" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/client/src/main/java/functional_classes/ClientSerializer.java</url>
-          <line>93</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java</url>
-          <line>82</line>
-          <properties class="gui.FXApplication" method="render">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="auxiliary_classes.ResponseMessage" memberName="typeName" />
