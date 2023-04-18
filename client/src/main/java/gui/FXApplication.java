@@ -83,6 +83,34 @@ public class FXApplication extends Application {
             }
         });
         t2.start();
+
+//        Task<Void> task = new Task<>() {
+//            @Override public Void call() {
+//                while (true) {
+//                    String answer = clientSerializer.getAndReturnMessageLoop();
+//                    if (Objects.equals(answer, "U")) {
+//                        System.out.println("inside task");
+//                        render();
+//                    }
+//                }
+//            }
+//        };
+//        ProgressBar bar = new ProgressBar();
+//        bar.progressProperty().bind(task.progressProperty());
+//        new Thread(task).start();
+
+//        Platform.runLater(() -> {
+//            while (true) {
+//                String answer = clientSerializer.getAndReturnMessageLoop();
+//                if (Objects.equals(answer, "U")) {
+//                    render();
+//                }
+//            }
+//        });
+//        Thread t2 = new Thread(() -> {
+//
+//        });
+//        t2.start();
     }
 
     public void render() {
