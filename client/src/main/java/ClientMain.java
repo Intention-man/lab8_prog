@@ -12,17 +12,7 @@ import gui.FXApplication;
 
 public class ClientMain {
     public static void main(String[] args) {
-        Thread t1 = new Thread(() -> {
-            FXApplication.main(args);
-        });
-//        Thread t2 = new Thread(() -> {
-//            while (true) {
-//                consoleApp();
-//            }
-//        });
-
-//        t2.start();
-        t1.start();
+        FXApplication.main(args);
     }
 
     public static void consoleApp() {

@@ -91,9 +91,11 @@ public class ClientSerializer {
             ResponseMessage deserializedResponse = (ResponseMessage) objectInputStream.readObject();
             if (Objects.equals(deserializedResponse.getTypeName(), "NOTIFY") || Objects.equals(deserializedResponse.getTypeName(), "java.lang.Boolean")){
 //                app.customizedAlert("Ререндер сцены из-за того, что один из клиентов обновил коллекцию").showAndWait();
-                app.render();
+//                app.render();
+                return "U";
             }
             else {
+                System.out.println(1);
                 System.out.println("deserializedResponse.getResponseData: " + deserializedResponse.getResponseData());
                 newResponse = deserializedResponse;
                 setReadyToReturnMessage(true);
