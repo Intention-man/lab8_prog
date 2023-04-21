@@ -67,8 +67,7 @@ public class StartScene {
             if (responseMessage.getResponseData().equals(true)) {
                 app.setTableScene();
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, (String) responseMessage.getResponseData());
-                alert.showAndWait();
+                app.customizedAlert((String) responseMessage.getResponseData()).showAndWait();
             }
         });
         return loginButton;

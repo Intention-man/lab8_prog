@@ -94,7 +94,7 @@ public class CollectionAnalyzer {
         }
     }
 
-    public int countByOscarsCount(Long enteredCount) {
+    public Integer countByOscarsCount(Long enteredCount) {
         return (int) movies.getMoviesList().stream()
                 .filter(movie -> movie.getOscarsCount() == enteredCount)
                 .count();
@@ -195,7 +195,7 @@ public class CollectionAnalyzer {
         return lines;
     }
 
-    public long sumOfLength() {
+    public Long sumOfLength() {
         return movies.getMoviesList().stream().mapToLong(Movie::getLength).sum();
     }
 

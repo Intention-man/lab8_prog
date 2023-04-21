@@ -23,7 +23,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
-public class CommandsScene {
+public class  CommandsScene {
     FXApplication app;
     FlowPane root;
     ClientManager clientManager;
@@ -31,7 +31,6 @@ public class CommandsScene {
     static ArrayList<FormField> form = new ArrayList<>();
     static HashMap<Integer, Object> answers = new HashMap<>();
     int step = 0;
-    String alertText;
 
     static {
         form.add(new FormField(0, "String", true, "Введите название фильма"));
@@ -58,7 +57,6 @@ public class CommandsScene {
     public Scene openScene() {
         clientManager.startNewAction("login 88 88");
         root = new FlowPane(Orientation.VERTICAL, 30.0, 30.0, app.navigateButtonList());
-
         List<Button> buttonList = retButtonList();
         FlowPane buttonContainer = new FlowPane(Orientation.HORIZONTAL, 30.0, 30.0);
         buttonContainer.setPrefWidth(app.getPrimaryStage().getWidth());

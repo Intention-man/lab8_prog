@@ -1,5 +1,6 @@
 package gui;
 
+import auxiliary_classes.ResponseMessage;
 import functional_classes.ClientManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ public class MovieInfoScene {
     HashMap<Integer, Object> map = new HashMap<>();
     ResultSet resultSet;
     String creator;
+    ResponseMessage response = null;
 
     public MovieInfoScene(FXApplication app, ClientManager clientManager, int movieId, String creator) {
         this.app = app;
@@ -31,14 +33,25 @@ public class MovieInfoScene {
     }
 
     public Scene openScene() throws SQLException {
-        FlowPane root = new FlowPane((Node) app.navigateButtonList());
+        FlowPane root = new FlowPane(app.navigateButtonList());
         root.setHgap(10);
         root.setVgap(10);
         root.setPrefWidth(1000);
         root.setPrefHeight(500);
         root.setPadding(new Insets(10));
-        resultSet = (ResultSet) clientManager.commandsWithParam("getMovieRSById", movieId).getResponseData();
-        System.out.println(resultSet.getMetaData());
+
+        clientManager.startNewAction("login 88 88");
+        response = null;
+        clientManager.commandsWithParam("getMovieRSById", movieId);
+        while (response == null){
+            response = app.clientSerializer.getNewResponse();
+            app.clientSerializer.setReadyToReturnMessage(false);
+        }
+        ResultSet resultSet = (ResultSet) response.getResponseData();
+
+
+//        resultSet = (ResultSet) clientManager.commandsWithParam("getMovieRSById", movieId).getResponseData();
+//        System.out.println(resultSet.getMetaData());
 
         try {
             List<String> keysList = new ArrayList<>();

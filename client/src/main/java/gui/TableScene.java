@@ -8,7 +8,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -64,7 +63,6 @@ public class TableScene {
             changeData("", "i");
             //FINALLY ADDED TO TableView
             FXCollections.sort(data, Comparator.comparing(list -> Integer.parseInt(list.get(0))));
-//            data = (ObservableList<ObservableList<String>>) data.stream().sorted(Comparator.comparing(list -> Integer.parseInt(list.get(0))));
             table.setItems(data);
             filterRecords();
             // on-table-row-click action
@@ -122,25 +120,6 @@ public class TableScene {
         filterZone.getChildren().addAll(label, columnNameField, conditionField, btnFilterByNumberCompare, btnFilterBySubstring, resetButton);
         root.getChildren().add(filterZone);
 
-//        data = table.getItems();
-//        textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-//            if (oldValue != null && (newValue.length() < oldValue.length())) {
-//                table.setItems(data);
-//            }
-//            String value = newValue.toLowerCase();
-//            ObservableList subentries = FXCollections.observableArrayList().sorted();
-//
-//            long count = table.getColumns().stream().count();
-//            for (int i = 0; i < table.getItems().size(); i++) {
-//                for (int j = 0; j < count; j++) {
-//                    String entry = "" + table.getColumns().get(j).getCellData(i);
-//                    if (entry.toLowerCase().contains(value)) {
-//                        subentries.add(table.getItems().get(i));
-//                        break;
-//                    }
-//                }
-//            }
-//            table.setItems(subentries);
     }
 
     public void changeData(String requestString, String typeOfRequest) {

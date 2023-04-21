@@ -6,19 +6,18 @@ import functional_classes.ClientSerializer;
 import functional_classes.Writer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.InputStream;
 import java.net.BindException;
 import java.net.SocketException;
@@ -26,7 +25,7 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.*;
 
-public class FXApplication extends Application {
+public class FXApplication extends Application implements PropertyChangeListener {
     Stage primaryStage;
     static ClientManager clientManager;
     Scene currentScene;
@@ -72,13 +71,13 @@ public class FXApplication extends Application {
         Image image = new Image(iconStream);
         primaryStage.getIcons().add(image);
         render();
+        clientSerializer.addPropertyChangeListener(this);
 
         Thread t2 = new Thread(() -> {
             while (true) {
                 String answer = clientSerializer.getAndReturnMessageLoop();
                 if (Objects.equals(answer, "U")) {
                     System.out.println("inside task");
-                    render();
                 }
             }
         });
@@ -89,13 +88,6 @@ public class FXApplication extends Application {
         System.out.println(1 + " " + currentScene);
         primaryStage.setScene(currentScene);
         primaryStage.show();
-    }
-
-    public Scene openStartScene() {
-        StartScene startScene = new StartScene(this, clientManager);
-        currentScene = startScene.common();
-        render();
-        return currentScene;
     }
 
     public FlowPane navigateButtonList() {
@@ -116,11 +108,18 @@ public class FXApplication extends Application {
         return flowPane;
     }
 
+    public Scene setStartScene() {
+        StartScene startScene = new StartScene(this, clientManager);
+        currentScene = startScene.common();
+        render();
+        return currentScene;
+    }
+
     public Scene setMainScene() {
         try {
             MoviesDisplayScene moviesDisplayScene = new MoviesDisplayScene(this, clientManager);
             currentScene = moviesDisplayScene.openScene();
-            render();
+//            render();
             return currentScene;
         } catch (SQLException err) {
             customizedAlert(err.getMessage()).showAndWait();
@@ -131,7 +130,7 @@ public class FXApplication extends Application {
     public Scene setTableScene() {
         TableScene tableScene = new TableScene(this, clientManager);
         currentScene = tableScene.openScene();
-        render();
+//        render();
         return currentScene;
     }
 
@@ -139,7 +138,7 @@ public class FXApplication extends Application {
         try {
             MovieInfoScene movieInfoScene = new MovieInfoScene(this, clientManager, id, creator);
             currentScene = movieInfoScene.openScene();
-            render();
+//            render();
             return currentScene;
         } catch (SQLException err) {
             customizedAlert(err.getMessage()).showAndWait();
@@ -182,14 +181,9 @@ public class FXApplication extends Application {
         return alert;
     }
 
-    public ClientSerializer getClientSerializer() {
-        return clientSerializer;
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+//        this.render();
+        Platform.runLater(this::render);
     }
-
-    public void changed(ObservableValue<? extends String> prop,
-                        String oldValue,
-                        String newValue) {
-        customizedAlert(newValue).showAndWait();
-    }
-
 }

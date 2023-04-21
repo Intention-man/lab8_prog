@@ -32,6 +32,7 @@ public class MoviesDisplayScene {
     FXApplication app;
     FlowPane root;
     ClientManager clientManager;
+    ResponseMessage response = null;
 
     public MoviesDisplayScene(FXApplication app, ClientManager clientManager) {
         this.app = app;
@@ -40,10 +41,12 @@ public class MoviesDisplayScene {
 
     public Scene openScene() throws SQLException {
         clientManager.startNewAction("login 88 88");
+        response = null;
         clientManager.commandsWithoutParam("getAllMoviesRS");
-        while (!app.clientSerializer.isReadyToReturnMessage()){}
-        ResponseMessage response = app.clientSerializer.newResponse;
-        app.clientSerializer.setReadyToReturnMessage(false);
+        while (response == null){
+            response = app.clientSerializer.getNewResponse();
+            app.clientSerializer.setReadyToReturnMessage(false);
+        }
         ResultSet resultSet = (ResultSet) response.getResponseData();
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
@@ -55,9 +58,6 @@ public class MoviesDisplayScene {
 
         String lastCreator = "";
         List<Color> colorList = new ArrayList<>();
-//        int columnCount = gridPane.getColumnCount();
-//        int rowCount =  gridPane.getRowCount();
-//        System.out.println(columnCount + " " + rowCount);
         while (resultSet.next()) {
             ObservableList<String> row = FXCollections.observableArrayList();
             for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
@@ -104,14 +104,6 @@ public class MoviesDisplayScene {
             );
             timeline.setCycleCount(Animation.INDEFINITE);
             timeline.play();
-//            Circle circle = new Circle();
-//            circle.setRadius(20 + 10 * Long.parseLong(row.get(6)) / Math.pow(2, 58));
-//            double posX = Math.max(gridPane.getPrefWidth() * (0.5 + (Double.parseDouble(row.get(2)) / Math.pow(2, 33))) / 10 - circle.getRadius(), 0);
-//            double posY = Math.max(gridPane.getPrefHeight() * (0.5 + (Double.parseDouble(row.get(3)) / Math.pow(2, 33))) / 10 - circle.getRadius(), 0);
-//            circle.setCenterX(posX);
-//            circle.setCenterY(posY);
-//            circle.setFill(colorList.get(colorList.size() - 1));
-//            circle.setStroke(Color.BLACK);
 
             Label label = new Label(row.get(1));
             StackPane stackPane = new StackPane(star, label);
@@ -123,36 +115,6 @@ public class MoviesDisplayScene {
             gridPane.add(stackPane, (int) posX, (int) posY);
             System.out.println(Arrays.asList((int) posX, (int) posY));
         }
-
-//        for (int i = 0; i < 3; i++) {
-//            Polygon star = new Polygon();
-//            star.getPoints().addAll(
-//                    100.0, 0.0,
-//                    117.0, 40.0,
-//                    160.0, 40.0,
-//                    127.0, 70.0,
-//                    139.0, 112.0,
-//                    100.0, 89.0,
-//                    61.0, 112.0,
-//                    73.0, 70.0,
-//                    40.0, 40.0,
-//                    83.0, 40.0
-//            );
-//            star.setFill(Color.YELLOW);
-//            star.setStroke(Color.BLACK);
-//            star.setStrokeWidth(2);
-//
-//            root.getChildren().add(star);
-//
-//            Timeline timeline = new Timeline(
-//                    new KeyFrame(Duration.ZERO, event -> {
-//                        star.setRotate(star.getRotate() + 1);
-//                    }),
-//                    new KeyFrame(Duration.millis(10))
-//            );
-//            timeline.setCycleCount(Animation.INDEFINITE);
-//            timeline.play();
-//        }
         root.getChildren().add(gridPane);
         return new Scene(root, 300, 150, Color.rgb(240, 217, 164));
     }

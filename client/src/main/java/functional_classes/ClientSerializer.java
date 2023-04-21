@@ -4,10 +4,8 @@ package functional_classes;
 import auxiliary_classes.CommandMessage;
 import auxiliary_classes.ResponseMessage;
 import gui.FXApplication;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
-
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
@@ -27,6 +25,7 @@ public class ClientSerializer {
     public ResponseMessage newResponse;
     boolean readyToReturnMessage;
     FXApplication app;
+    private PropertyChangeSupport support;
 
 
     public ClientSerializer(int clientPort) throws SocketException, UnknownHostException {
@@ -35,6 +34,7 @@ public class ClientSerializer {
         host = InetAddress.getByName("localhost");
         serverAddress = new InetSocketAddress(host, 7000);
         socket = new DatagramSocket(clientPort);
+        support = new PropertyChangeSupport(this);
         readyToReturnMessage = false;
     }
 
@@ -93,12 +93,13 @@ public class ClientSerializer {
 //                app.customizedAlert("Ререндер сцены из-за того, что один из клиентов обновил коллекцию").showAndWait();
 //                app.render();
                 return "U";
+            } else if (Objects.equals(deserializedResponse.getTypeName(), "java.lang.String") || Objects.equals(deserializedResponse.getTypeName(), "java.lang.Integer") || Objects.equals(deserializedResponse.getTypeName(), "java.lang.Long")){
+                app.customizedAlert(deserializedResponse.getResponseData().toString()).showAndWait();
             }
             else {
                 System.out.println(1);
                 System.out.println("deserializedResponse.getResponseData: " + deserializedResponse.getResponseData());
-                newResponse = deserializedResponse;
-                setReadyToReturnMessage(true);
+                   setNewResponse(deserializedResponse);
             }
         } catch (IOException | ClassNotFoundException err) {
             err.printStackTrace();
@@ -115,17 +116,16 @@ public class ClientSerializer {
         this.readyToReturnMessage = readyToReturnMessage;
     }
 
-//    public String getNewMessage() {
-//        return newMessage;
-//    }
-
-    public boolean isReadyToReturnMessage() {
-        return readyToReturnMessage;
+    public void setNewResponse(ResponseMessage value) {
+        support.firePropertyChange("newResponse", this.newResponse, value);
+        this.newResponse = value;
     }
 
-//    public void changed(ObservableValue<? extends String> prop,
-//                               String oldValue,
-//                               String newValue) {
-//        app.customizedAlert(newValue).showAndWait();
-//    }
+    public ResponseMessage getNewResponse() {
+        return newResponse;
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
 }
