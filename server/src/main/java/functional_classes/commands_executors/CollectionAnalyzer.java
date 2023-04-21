@@ -30,9 +30,9 @@ public class CollectionAnalyzer {
 
     // commands execution
 
-    public boolean addCommandToHistory(String command) {
+    public String addCommandToHistory(String command) {
         commandsHistory.add(command);
-        return true;
+        return "";
     }
 
     public String addIfMax(HashMap data) {
@@ -107,11 +107,13 @@ public class CollectionAnalyzer {
     public ResultSet getDigitFilteredMoviesRS(String condition) {
         return dbCollectionHandler.getDigitFilteredMoviesRS(condition);
     }
+    
     public ResultSet getSubstringFilteredMoviesRS(String condition) {
         return dbCollectionHandler.getSubstringFilteredMoviesRS(condition);
     }
 
     public ResultSet getMovieRSById(Integer id) throws SQLException {
+        System.out.println("id: " + id);
         return dbCollectionHandler.getMovieRSById(id);
     }
 

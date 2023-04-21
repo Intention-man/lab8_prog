@@ -4,6 +4,9 @@ package functional_classes;
 import auxiliary_classes.CommandMessage;
 import auxiliary_classes.ResponseMessage;
 import gui.FXApplication;
+import javafx.scene.control.Alert;
+import javafx.scene.layout.Region;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
@@ -56,15 +59,6 @@ public class ClientSerializer {
             byteBAOS = byteArrayOutputStream.toByteArray();
             buffer = ByteBuffer.wrap(byteBAOS);
             dc.send(buffer, serverAddress);
-            //            dc.close();
-
-//            ResponseMessage message;
-//            do {
-//                message = getAndReturnMessageLoop();
-//            }
-//            while (Objects.equals(message.getTypeName(), "null"));
-//            return message;
-
         } catch (SocketTimeoutException e) {
             e.printStackTrace();
         } catch (EOFException e) {
@@ -89,22 +83,20 @@ public class ClientSerializer {
             byte[] a = byteArrayInputStream.readAllBytes();
             ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(a));
             ResponseMessage deserializedResponse = (ResponseMessage) objectInputStream.readObject();
-            if (Objects.equals(deserializedResponse.getTypeName(), "NOTIFY") || Objects.equals(deserializedResponse.getTypeName(), "java.lang.Boolean")){
-//                app.customizedAlert("Ререндер сцены из-за того, что один из клиентов обновил коллекцию").showAndWait();
-//                app.render();
+            if (Objects.equals(deserializedResponse.getTypeName(), "NOTIFY")){
+                    System.out.println("NOTIFY to update");
+                    support.firePropertyChange("notify to update", this.newResponse, deserializedResponse);
                 return "U";
-            } else if (Objects.equals(deserializedResponse.getTypeName(), "java.lang.String") || Objects.equals(deserializedResponse.getTypeName(), "java.lang.Integer") || Objects.equals(deserializedResponse.getTypeName(), "java.lang.Long")){
-                app.customizedAlert(deserializedResponse.getResponseData().toString()).showAndWait();
             }
-            else {
+            else if (!Objects.equals(deserializedResponse.getResponseData().toString(), "")){
                 System.out.println(1);
                 System.out.println("deserializedResponse.getResponseData: " + deserializedResponse.getResponseData());
-                   setNewResponse(deserializedResponse);
+                setNewResponse(deserializedResponse);
+                setReadyToReturnMessage(true);
             }
         } catch (IOException | ClassNotFoundException err) {
             err.printStackTrace();
         }
-//        return new ResponseMessage<>("null", null);
         return "null";
     }
 
@@ -117,8 +109,12 @@ public class ClientSerializer {
     }
 
     public void setNewResponse(ResponseMessage value) {
-        support.firePropertyChange("newResponse", this.newResponse, value);
+        // support.firePropertyChange("newResponse", this.newResponse, value);
         this.newResponse = value;
+    }
+
+    public boolean isReadyToReturnMessage() {
+        return readyToReturnMessage;
     }
 
     public ResponseMessage getNewResponse() {

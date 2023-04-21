@@ -1,6 +1,7 @@
 package gui;
 
 import auxiliary_classes.FormField;
+import auxiliary_classes.ResponseMessage;
 import enums.Country;
 import enums.MovieGenre;
 import enums.MpaaRating;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
 import java.util.*;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class  CommandsScene {
     static ArrayList<FormField> form = new ArrayList<>();
     static HashMap<Integer, Object> answers = new HashMap<>();
     int step = 0;
+    ResponseMessage response = null;
 
     static {
         form.add(new FormField(0, "String", true, "Введите название фильма"));
@@ -55,8 +58,9 @@ public class  CommandsScene {
     }
 
     public Scene openScene() {
-        clientManager.startNewAction("login 88 88");
+//        clientManager.startNewAction("login 88 88");
         root = new FlowPane(Orientation.VERTICAL, 30.0, 30.0, app.navigateButtonList());
+
         List<Button> buttonList = retButtonList();
         FlowPane buttonContainer = new FlowPane(Orientation.HORIZONTAL, 30.0, 30.0);
         buttonContainer.setPrefWidth(app.getPrimaryStage().getWidth());
@@ -117,7 +121,11 @@ public class  CommandsScene {
     public Button retUpdateButton() {
         Button updateButton = new Button("Изменить фильм");
         updateButton.setOnAction(e -> {
-            List<Movie> moviesList = ((Movies) clientManager.commandsWithoutParam("getMovies").getResponseData()).getSortedMovies("name");
+
+            clientManager.commandsWithoutParam("getMovies");
+            updateResponseData();
+
+            List<Movie> moviesList = ((Movies) response.getResponseData()).getSortedMovies("name");
             ToggleGroup group = new ToggleGroup();
             moviesList.forEach(movie -> {
                 System.out.println(movie.getName() + " " + movie.getCreator());
@@ -146,7 +154,9 @@ public class  CommandsScene {
             delButton.setOnAction(e2 -> {
                 try{
                     int id = Integer.parseInt(textField.getText().trim());
-                    app.customizedAlert((String) clientManager.commandsWithParam("removeById", id).getResponseData()).showAndWait();
+                    clientManager.commandsWithParam("removeById", id);
+                    updateResponseData();
+                    app.customizedAlert(response.getResponseData().toString()).showAndWait();
                 } catch (Exception err){
                     app.customizedAlert("Вы ввели некорректное значение id. Повторите попытку").showAndWait();
                 }
@@ -169,7 +179,9 @@ public class  CommandsScene {
             delButton.setOnAction(e2 -> {
                 try{
                     long oscarsCount = Long.parseLong(textField.getText().trim());
-                    app.customizedAlert((String) clientManager.commandsWithParam("removeByOscarsCount", oscarsCount).getResponseData()).showAndWait();
+                    clientManager.commandsWithParam("removeByOscarsCount", oscarsCount);
+                    updateResponseData();
+                    app.customizedAlert(response.getResponseData().toString()).showAndWait();
                 } catch (Exception err){
                     app.customizedAlert("Вы ввели некорректное количество оскаров. Повторите попытку").showAndWait();
                 }
@@ -182,7 +194,9 @@ public class  CommandsScene {
         Button button = new Button("clear");
         button.setOnAction(e -> {
             step = 0;
-            app.customizedAlert(clientManager.commandsWithoutParam("clear").getResponseData().toString()).showAndWait();
+            clientManager.commandsWithoutParam("clear");
+            updateResponseData();
+            app.customizedAlert(response.getResponseData().toString()).showAndWait();
         });
         return button;
     }
@@ -201,6 +215,8 @@ public class  CommandsScene {
         Button button = new Button("info");
         button.setOnAction(e -> {
             clientManager.noRSCommands("info");
+            updateResponseData();
+            app.customizedAlert(response.getResponseData().toString()).showAndWait();
         });
         return button;
     }
@@ -208,7 +224,9 @@ public class  CommandsScene {
     public Button retHistoryButton() {
         Button button = new Button("history");
         button.setOnAction(e -> {
-            app.customizedAlert(clientManager.noRSCommands("history")).showAndWait();
+            clientManager.noRSCommands("history");
+            updateResponseData();
+            app.customizedAlert(response.getResponseData().toString()).showAndWait();
         });
         return button;
     }
@@ -224,7 +242,9 @@ public class  CommandsScene {
     public Button retSumOfLengthButton() {
         Button button = new Button("sumOfLength");
         button.setOnAction(e -> {
-            app.customizedAlert("Суммарная длина всех фильмов в коллекции: " + clientManager.noRSCommands("sumOfLength")).showAndWait();
+            clientManager.noRSCommands("sumOfLength");
+            updateResponseData();
+            app.customizedAlert("Суммарная длина всех фильмов в коллекции: " + response.getResponseData().toString()).showAndWait();
         });
         return button;
     }
@@ -243,7 +263,9 @@ public class  CommandsScene {
             getButton.setOnAction(e2 -> {
                 try{
                     long oscarsCount = Long.parseLong(textField.getText().trim());
-                    app.customizedAlert("Такое количество оскаров имеет(-ют): " + clientManager.commandsWithParam("countByOscarsCount", oscarsCount).getResponseData().toString() + " фильмов").showAndWait();
+                    clientManager.commandsWithParam("countByOscarsCount", oscarsCount);
+                    updateResponseData();
+                    app.customizedAlert("Такое количество оскаров имеет(-ют): " + response.getResponseData().toString() + " фильмов").showAndWait();
                 } catch (Exception err){
                     app.customizedAlert(err.getMessage()).showAndWait();
                 }
@@ -274,8 +296,6 @@ public class  CommandsScene {
         });
         return button;
     }
-
-
 
     // not buttons
     
@@ -375,5 +395,11 @@ public class  CommandsScene {
         step = nextStep;
     }
 
-
+    public void updateResponseData(){
+        response = null;
+        while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
+            response = app.clientSerializer.getNewResponse();
+        }
+        app.clientSerializer.setReadyToReturnMessage(false);
+    }
 }

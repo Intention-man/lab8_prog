@@ -32,6 +32,7 @@ public class TableScene {
     Label lbl;
     List<String> columnNamesList;
     ObservableList<ObservableList<String>> data;
+    ResponseMessage response = null;
 
 
     public TableScene(FXApplication app, ClientManager clientManager) {
@@ -46,11 +47,17 @@ public class TableScene {
     }
 
     public Scene openScene() {
-        System.out.println("New render");
-        clientManager.startNewAction("login 88 88");
         root = new FlowPane(Orientation.VERTICAL, 30.0, 30.0, app.navigateButtonList(), table);
-        ResponseMessage response = clientManager.commandsWithoutParam("getAllMoviesRS");
+        System.out.println("New render");
+//        clientManager.startNewAction("login 88 88");
+        response = null;
+        clientManager.commandsWithoutParam("getAllMoviesRS");
+        while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
+            response = app.clientSerializer.getNewResponse();
+        }
+        app.clientSerializer.setReadyToReturnMessage(false);
         ResultSet resultSet = (ResultSet) response.getResponseData();
+
         try {
             for (int i = 0; i < resultSet.getMetaData().getColumnCount(); i++) {
                 //We are using non property style for making dynamic table
@@ -119,20 +126,24 @@ public class TableScene {
 
         filterZone.getChildren().addAll(label, columnNameField, conditionField, btnFilterByNumberCompare, btnFilterBySubstring, resetButton);
         root.getChildren().add(filterZone);
-
     }
 
     public void changeData(String requestString, String typeOfRequest) {
         try {
-            ResultSet resultSet;
             System.out.println(typeOfRequest);
+            response = null;
             if (typeOfRequest.equals("d")) {
-                resultSet = (ResultSet) clientManager.commandsWithParam("getDigitFilteredMoviesRS", requestString).getResponseData();
+                clientManager.commandsWithParam("getDigitFilteredMoviesRS", requestString);
             } else if (typeOfRequest.equals("s")) {
-                resultSet = (ResultSet) clientManager.commandsWithParam("getSubstringFilteredMoviesRS", requestString).getResponseData();
+                clientManager.commandsWithParam("getSubstringFilteredMoviesRS", requestString);
             } else {
-                resultSet = (ResultSet) clientManager.commandsWithoutParam("getAllMoviesRS").getResponseData();
+                clientManager.commandsWithoutParam("getAllMoviesRS");
             }
+            while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
+                response = app.clientSerializer.getNewResponse();
+            }
+            app.clientSerializer.setReadyToReturnMessage(false);
+            ResultSet resultSet = (ResultSet) response.getResponseData();
             ObservableList<ObservableList<String>> newData = FXCollections.observableArrayList();
             while (resultSet.next()) {
                 //Iterate Row

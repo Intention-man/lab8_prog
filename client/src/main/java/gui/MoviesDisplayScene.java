@@ -40,13 +40,13 @@ public class MoviesDisplayScene {
     }
 
     public Scene openScene() throws SQLException {
-        clientManager.startNewAction("login 88 88");
+//        clientManager.startNewAction("login 88 88");
         response = null;
         clientManager.commandsWithoutParam("getAllMoviesRS");
-        while (response == null){
+        while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
             response = app.clientSerializer.getNewResponse();
-            app.clientSerializer.setReadyToReturnMessage(false);
         }
+        app.clientSerializer.setReadyToReturnMessage(false);
         ResultSet resultSet = (ResultSet) response.getResponseData();
         GridPane gridPane = new GridPane();
         gridPane.setHgap(10);
@@ -72,13 +72,13 @@ public class MoviesDisplayScene {
                 } while (colorList.contains(newColor));
                 colorList.add(newColor);
             }
-            System.out.println(gridPane.getPrefWidth() + " " + gridPane.getPrefHeight());
+//            System.out.println(gridPane.getPrefWidth() + " " + gridPane.getPrefHeight());
             root = new FlowPane(Orientation.VERTICAL, 30.0, 30.0, app.navigateButtonList());
             Polygon star = new Polygon();
 //            center = 100, 44
             double k = Long.parseLong(row.get(6)) / Math.pow(2, 64);
             double r = 0.7 + k * 8;
-            System.out.println(r);
+//            System.out.println(r);
             star.getPoints().addAll(
                     100.0, 44 - 44 * r,
                     100 + 17 * r, 44.0 - 4 * r,
@@ -113,7 +113,7 @@ public class MoviesDisplayScene {
             });
 
             gridPane.add(stackPane, (int) posX, (int) posY);
-            System.out.println(Arrays.asList((int) posX, (int) posY));
+//            System.out.println(Arrays.asList((int) posX, (int) posY));
         }
         root.getChildren().add(gridPane);
         return new Scene(root, 300, 150, Color.rgb(240, 217, 164));

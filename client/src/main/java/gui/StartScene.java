@@ -9,9 +9,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Objects;
+import java.sql.ResultSet;
+import java.util.*;
 
 public class StartScene {
     FXApplication app;
@@ -21,6 +20,8 @@ public class StartScene {
     TextField usernameField;
     PasswordField passwordField;
     String mode;
+    ResponseMessage response = null;
+    ResourceBundle bundle;
 
     public StartScene(FXApplication app, ClientManager clientManager) {
         this.app = app;
@@ -28,17 +29,17 @@ public class StartScene {
         mode = "L";
     }
 
-    public Scene common() {
+    public Scene openScene() {
         GridPane root = new GridPane();
-
-        usernameLabel = new Label("Username:");
+        bundle = app.getBundle();
+        usernameLabel = new Label(bundle.getString("Username"));
         usernameField = new TextField();
-        passwordLabel = new Label("Password:");
+        passwordLabel = new Label(bundle.getString("Password"));
         passwordField = new PasswordField();
-        Button changeModBtn = new Button((Objects.equals(mode, "L") ? "Не зарегистрированы? К форме регистрации!" : "Уже зарегистрированы? Авторизоваться!"));
+        Button changeModBtn = new Button((Objects.equals(mode, "L") ? bundle.getString("toRegister") : bundle.getString("toLogin")));
         changeModBtn.setOnAction(e -> {
             mode = (Objects.equals(mode, "L") ? "R" : "L");
-            this.common();
+            this.openScene();
         });
 
         root.setHgap(10);
@@ -51,8 +52,10 @@ public class StartScene {
 
         HBox buttonLayout = new HBox(10);
         buttonLayout.getChildren().add(Objects.equals(mode, "L") ? authorization() : registration());
+
         root.add(buttonLayout, 1, 2);
         root.add(changeModBtn, 2, 2);
+        root.add(retLangButtons(), 0, 3);
         Scene scene = new Scene(root, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
         return scene;
     }
@@ -63,11 +66,13 @@ public class StartScene {
         loginButton.setOnAction(event -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            ResponseMessage responseMessage = clientManager.startNewAction("login " + username + " " + password);
-            if (responseMessage.getResponseData().equals(true)) {
+
+            clientManager.commandsWithParam("login", (username + " " + password));
+            updateResponseData();
+            if (response.getResponseData().equals(true)) {
                 app.setTableScene();
             } else {
-                app.customizedAlert((String) responseMessage.getResponseData()).showAndWait();
+                app.customizedAlert((String) response.getResponseData()).showAndWait();
             }
         });
         return loginButton;
@@ -75,20 +80,50 @@ public class StartScene {
 
     public Button registration() {
         Button regButton = new Button("Registration");
-
         // Set the action for the login button
         regButton.setOnAction(event -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            ResponseMessage responseMessage = clientManager.startNewAction("registration " + username + " " + password);
-            if (responseMessage.getResponseData().equals(true)) {
+
+            clientManager.commandsWithParam("registration", (username + " " + password));
+            updateResponseData();
+
+            if (response.getResponseData().equals(true)) {
                 mode = "L";
-                common();
+                openScene();
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, (String) responseMessage.getResponseData());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, (String) response.getResponseData());
                 alert.showAndWait();
             }
         });
         return regButton;
+    }
+
+    public HBox retLangButtons(){
+        ToggleGroup group = new ToggleGroup();
+        HBox langButtons = new HBox(10);
+        HashMap<String, String> langMap = new HashMap<>();
+        langMap.put("English (NZE)", "Gui_en_NZE");
+        langMap.put("Русский", "Gui_ru_RU");
+        for (String key : langMap.keySet()) {
+            RadioButton rBtn = new RadioButton(key);
+            rBtn.setToggleGroup(group);
+            langButtons.getChildren().add(rBtn);
+            rBtn.setOnAction(event -> {
+                bundle = ResourceBundle.getBundle(langMap.get(key));
+                app.setBundle(bundle);
+                app.renderByDataUpdate();
+            });
+        }
+        return langButtons;
+    }
+
+    public void updateResponseData(){
+        response = null;
+        while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
+            response = app.clientSerializer.getNewResponse();
+        }
+        System.out.println("got data");
+        app.clientSerializer.setReadyToReturnMessage(false);
     }
 }

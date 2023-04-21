@@ -180,95 +180,99 @@ public class ClientManager {
             case ("info") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "info", login, password);
                 clientSerializer.send(commandMessage);
-//                ArrayList<String> answer = (ArrayList<String>) clientSerializer.send(commandMessage).getResponseData();
-//                while (!clientSerializer.isReadyToReturnMessage()){
-//                    int t = 0;
-//                }
-
             }
             case ("history") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "getLast12Commands", login, password);
                 clientSerializer.send(commandMessage);
-//                ArrayList<String> answer = (ArrayList<String>) clientSerializer.send(commandMessage).getResponseData();
-//                StringBuilder message = new StringBuilder();
-//                for (var str : answer) {
-//                    message.append(str).append("\n");
-//                }
-//                return message.toString();
             }
             case ("sumOfLength") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "sumOfLength", login, password);
-                return clientSerializer.send(commandMessage).getResponseData().toString();
+                clientSerializer.send(commandMessage);
             }
         }
         return null;
     }
 
-    public ResponseMessage commandsWithoutParam(String commandName) {
+    public void commandsWithoutParam(String commandName) {
         CommandMessage<Object> commandMessage;
         commandMessage = new CommandMessage<>("CollectionAnalyzer", "addCommandToHistory", commandName, login, password);
         clientSerializer.send(commandMessage);
         switch (commandName) {
             case ("getMovies") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "getMovies", login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("getAllMoviesRS") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "getAllMoviesRS", login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("clear") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "clear", login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
         }
-        return null;
     }
 
     public ResponseMessage commandsWithParam(String commandName, java.io.Serializable commandData) {
         CommandMessage<Object> commandMessage;
-        commandMessage = new CommandMessage<>("CollectionAnalyzer", "addCommandToHistory", commandName, login, password);
-        clientSerializer.send(commandMessage);
+        if (login != null && password != null) {
+            commandMessage = new CommandMessage<>("CollectionAnalyzer", "addCommandToHistory", commandName, login, password);
+            clientSerializer.send(commandMessage);
+        }
         switch (commandName) {
+            case ("login") -> {
+                List<String> list = List.of(commandData.toString().split(" "));
+                login = list.get(0);
+                password = list.get(1);
+                commandMessage = new CommandMessage<>("DBUserHandler", "isUserExists", login, password);
+                clientSerializer.send(commandMessage);
+            }
+            case ("registration") -> {
+                List<String> list = List.of(commandData.toString().split(" "));
+                login = list.get(0);
+                password = list.get(1);
+                commandMessage = new CommandMessage<>("DBUserHandler", "registration", login, password);
+                clientSerializer.send(commandMessage);
+            }
             case ("getMovieRSById") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "getMovieRSById", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("getDigitFilteredMoviesRS") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "getDigitFilteredMoviesRS", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("getSubstringFilteredMoviesRS") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "getSubstringFilteredMoviesRS", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("add") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "addMovie", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("addIfMin") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "addIfMin", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("addIfMax") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "addIfMax", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("update") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "updateMovie", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("removeById") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "removeById", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("removeByOscarsCount") -> {
                 commandMessage = new CommandMessage<>("CollectionAnalyzer", "removeAnyByOscarsCount", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                clientSerializer.send(commandMessage);
             }
             case ("countByOscarsCount") -> {
-                    commandMessage = new CommandMessage<>("CollectionAnalyzer", "countByOscarsCount", commandData, login, password);
-                return clientSerializer.send(commandMessage);
+                commandMessage = new CommandMessage<>("CollectionAnalyzer", "countByOscarsCount", commandData, login, password);
+                clientSerializer.send(commandMessage);
             }
         }
         return null;
@@ -278,7 +282,7 @@ public class ClientManager {
         return login;
     }
 
-    public void startReadFile(String fileName){
+    public void startReadFile(String fileName) {
         clientReader.readFile(fileName);
     }
 }

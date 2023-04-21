@@ -5,7 +5,6 @@ import functional_classes.ClientManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
@@ -21,7 +20,6 @@ public class MovieInfoScene {
     ClientManager clientManager;
     int movieId;
     HashMap<Integer, Object> map = new HashMap<>();
-    ResultSet resultSet;
     String creator;
     ResponseMessage response = null;
 
@@ -40,18 +38,11 @@ public class MovieInfoScene {
         root.setPrefHeight(500);
         root.setPadding(new Insets(10));
 
-        clientManager.startNewAction("login 88 88");
-        response = null;
+//        clientManager.startNewAction("login 88 88");
         clientManager.commandsWithParam("getMovieRSById", movieId);
-        while (response == null){
-            response = app.clientSerializer.getNewResponse();
-            app.clientSerializer.setReadyToReturnMessage(false);
-        }
+        updateResponseData();
         ResultSet resultSet = (ResultSet) response.getResponseData();
-
-
-//        resultSet = (ResultSet) clientManager.commandsWithParam("getMovieRSById", movieId).getResponseData();
-//        System.out.println(resultSet.getMetaData());
+        System.out.println("got not null response");
 
         try {
             List<String> keysList = new ArrayList<>();
@@ -67,14 +58,13 @@ public class MovieInfoScene {
                     row.add(resultSet.getString(i + 1));
                     GridPane gridPane = new GridPane();
                     gridPane.add(new Label(keysList.get(i)), 0, 0);
-                    TextField textField = retTextField(i, (creator.equals(clientManager.getLogin()) && !Arrays.asList("id", "creation_date", "creator").contains(keysList.get(i))));
+                    TextField textField = retTextField(i, (creator.equals(clientManager.getLogin()) && !Arrays.asList("id", "creation_date", "creator").contains(keysList.get(i))), resultSet.getString(i + 1));
                     gridPane.add(textField, 1, 0);
                     root.getChildren().add(gridPane);
                 }
                 map.put(map.size(), movieId);
                 System.out.println("Row [1] added " + row);
             }
-
             if (Objects.equals(creator, clientManager.getLogin())){
                 Button saveButton = retSaveButton();
                 root.getChildren().add(saveButton);
@@ -90,12 +80,11 @@ public class MovieInfoScene {
         return scene;
     }
 
-    public TextField retTextField(int i, boolean isEditable) throws SQLException {
-        TextField textField = new TextField(resultSet.getString(i + 1));
-
+    public TextField retTextField(int i, boolean isEditable, String value) throws SQLException {
+        TextField textField = new TextField(value);
         if (isEditable) {
             int finalI = map.size();
-            map.put(map.size(), resultSet.getString(i + 1));
+            map.put(map.size(), value);
             textField.textProperty().addListener((observable, oldValue, newValue) -> {
                 System.out.println("textfield changed from " + oldValue + " to " + newValue);
                 map.put(finalI, newValue);
@@ -111,8 +100,10 @@ public class MovieInfoScene {
         Button saveButton = new Button("Сохранить изменения");
         saveButton.setOnAction(e -> {
             map.forEach((key, value) -> System.out.println(key + " " + value));
+            clientManager.commandsWithParam("update", map);
+            updateResponseData();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText((String) clientManager.commandsWithParam("update", map).getResponseData());
+            alert.setHeaderText(response.getResponseData().toString());
             alert.setContentText(clientManager.getLogin());
             alert.showAndWait();
         });
@@ -122,8 +113,10 @@ public class MovieInfoScene {
     public Button retRemoveButton(){
         Button removeButton = new Button("Удалить фильм");
         removeButton.setOnAction(e -> {
+            clientManager.commandsWithParam("remove", movieId);
+            updateResponseData();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText((String) clientManager.commandsWithParam("remove", movieId).getResponseData());
+            alert.setHeaderText(response.getResponseData().toString());
             alert.setContentText(clientManager.getLogin());
             alert.showAndWait();
         });
@@ -133,9 +126,17 @@ public class MovieInfoScene {
     public Button retExitButton(){
         Button exitButton = new Button("Выйти на главную страницу без сохранения изменений");
         exitButton.setOnAction(e -> {
-            app.setMainScene();
+            app.setMovieDisplayScene();
         });
         return exitButton;
+    }
+
+    public void updateResponseData(){
+        response = null;
+        while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
+            response = app.clientSerializer.getNewResponse();
+        }
+        app.clientSerializer.setReadyToReturnMessage(false);
     }
 
 }

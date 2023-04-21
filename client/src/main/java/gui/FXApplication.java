@@ -29,10 +29,14 @@ public class FXApplication extends Application implements PropertyChangeListener
     Stage primaryStage;
     static ClientManager clientManager;
     Scene currentScene;
+    String currentSceneName;
     ClientReader reader = new ClientReader();
     Writer writer = new Writer();
     int port;
     ClientSerializer clientSerializer;
+    int lastMovieId;
+    String lastCreator;
+    ResourceBundle bundle;
 
 
     public static void main(String[] args) {
@@ -41,6 +45,7 @@ public class FXApplication extends Application implements PropertyChangeListener
 
     @Override
     public void start(Stage primaryStage) {
+        bundle = ResourceBundle.getBundle("Gui_ru_RU");
         try {
             port = 5000;
             while (true) {
@@ -64,13 +69,15 @@ public class FXApplication extends Application implements PropertyChangeListener
         primaryStage.setY(20);
         primaryStage.setWidth(1200);
         primaryStage.setHeight(600);
-        currentScene = setCommandsScene();
+        currentScene = setStartScene();
         primaryStage.setTitle("Movie Store");
         InputStream iconStream = getClass().getResourceAsStream("/images/river.jpg");
         assert iconStream != null;
         Image image = new Image(iconStream);
         primaryStage.getIcons().add(image);
         render();
+
+        // Subscribe to data update
         clientSerializer.addPropertyChangeListener(this);
 
         Thread t2 = new Thread(() -> {
@@ -88,11 +95,22 @@ public class FXApplication extends Application implements PropertyChangeListener
         System.out.println(1 + " " + currentScene);
         primaryStage.setScene(currentScene);
         primaryStage.show();
+        System.out.println("render");
+    }
+
+    public void renderByDataUpdate() {
+        switch (currentSceneName) {
+            case ("StartScene") -> setStartScene();
+            case ("MoviesDisplayScene") -> setMovieDisplayScene();
+            case ("TableScene") -> setTableScene();
+            case ("MovieInfoScene") -> setMovieInfoScene(lastMovieId, lastCreator);
+            case ("CommandsScene") -> setCommandsScene();
+        }
     }
 
     public FlowPane navigateButtonList() {
         Button btn1 = new Button("Страница оттображения всех фильмов на доске");
-        btn1.setOnAction(e -> setMainScene());
+        btn1.setOnAction(e -> setMovieDisplayScene());
         Button btn2 = new Button("Страница оттображения всех фильмов в таблице");
         btn2.setOnAction(e -> setTableScene());
         Button btn3 = new Button("Страница с командами");
@@ -110,16 +128,18 @@ public class FXApplication extends Application implements PropertyChangeListener
 
     public Scene setStartScene() {
         StartScene startScene = new StartScene(this, clientManager);
-        currentScene = startScene.common();
+        currentScene = startScene.openScene();
+        currentSceneName = "StartScene";
         render();
         return currentScene;
     }
 
-    public Scene setMainScene() {
+    public Scene setMovieDisplayScene() {
         try {
             MoviesDisplayScene moviesDisplayScene = new MoviesDisplayScene(this, clientManager);
             currentScene = moviesDisplayScene.openScene();
-//            render();
+            currentSceneName = "MoviesDisplayScene";
+            render();
             return currentScene;
         } catch (SQLException err) {
             customizedAlert(err.getMessage()).showAndWait();
@@ -130,15 +150,19 @@ public class FXApplication extends Application implements PropertyChangeListener
     public Scene setTableScene() {
         TableScene tableScene = new TableScene(this, clientManager);
         currentScene = tableScene.openScene();
-//        render();
+        currentSceneName = "TableScene";
+        render();
         return currentScene;
     }
 
-    public Scene setMovieInfoScene(int id, String creator) {
+    public Scene setMovieInfoScene(int id, String creator) {  
         try {
+            lastMovieId = id;
+            lastCreator = creator;
             MovieInfoScene movieInfoScene = new MovieInfoScene(this, clientManager, id, creator);
             currentScene = movieInfoScene.openScene();
-//            render();
+            currentSceneName = "MovieInfoScene";
+            render();
             return currentScene;
         } catch (SQLException err) {
             customizedAlert(err.getMessage()).showAndWait();
@@ -149,8 +173,13 @@ public class FXApplication extends Application implements PropertyChangeListener
     public Scene setCommandsScene() {
         CommandsScene commandsScene = new CommandsScene(this, clientManager);
         currentScene = commandsScene.openScene();
+        currentSceneName = "CommandsScene";
         render();
         return currentScene;
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
     }
 
     public Button retUserProfileButton() {
@@ -173,6 +202,10 @@ public class FXApplication extends Application implements PropertyChangeListener
         return primaryStage;
     }
 
+    public ResourceBundle getBundle() {
+        return bundle;
+    }
+
     public Alert customizedAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("");
@@ -184,6 +217,6 @@ public class FXApplication extends Application implements PropertyChangeListener
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 //        this.render();
-        Platform.runLater(this::render);
+        Platform.runLater(this::renderByDataUpdate);
     }
 }

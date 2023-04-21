@@ -36,7 +36,6 @@ public class ServerSerializer {
         datagramChannel.bind(socketAddressToGet);
     }
 
-
     public void waitForRequest() {
         try {
             while (Objects.equals(stage, "get")) {
@@ -62,7 +61,6 @@ public class ServerSerializer {
 
     public void executeCommand() {
         // command execution
-//        System.out.println(stage);
         Object result = commandDistributor.execution(deserializedCommandMessage);
         System.out.println("result: " + result);
 
