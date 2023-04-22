@@ -51,6 +51,7 @@ public class StartScene {
         root.add(passwordField, 1, 1);
 
         HBox buttonLayout = new HBox(10);
+        System.out.println(mode);
         buttonLayout.getChildren().add(Objects.equals(mode, "L") ? authorization() : registration());
 
         root.add(buttonLayout, 1, 2);
@@ -61,7 +62,7 @@ public class StartScene {
     }
 
     public Button authorization() {
-        Button loginButton = new Button("Login");
+        Button loginButton = new Button(bundle.getString("Login"));
         // Set the action for the login button
         loginButton.setOnAction(event -> {
             String username = usernameField.getText();
@@ -79,7 +80,8 @@ public class StartScene {
     }
 
     public Button registration() {
-        Button regButton = new Button("Registration");
+        Button regButton = new Button(bundle.getString("Registration"));
+        System.out.println("Registration");
         // Set the action for the login button
         regButton.setOnAction(event -> {
             String username = usernameField.getText();

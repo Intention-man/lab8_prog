@@ -70,7 +70,7 @@ public class FXApplication extends Application implements PropertyChangeListener
         primaryStage.setWidth(1200);
         primaryStage.setHeight(600);
         currentScene = setStartScene();
-        primaryStage.setTitle("Movie Store");
+        primaryStage.setTitle(bundle.getString("MovieStore"));
         InputStream iconStream = getClass().getResourceAsStream("/images/river.jpg");
         assert iconStream != null;
         Image image = new Image(iconStream);
@@ -109,19 +109,21 @@ public class FXApplication extends Application implements PropertyChangeListener
     }
 
     public FlowPane navigateButtonList() {
-        Button btn1 = new Button("Страница оттображения всех фильмов на доске");
-        btn1.setOnAction(e -> setMovieDisplayScene());
-        Button btn2 = new Button("Страница оттображения всех фильмов в таблице");
+        Button btn1 = new Button(bundle.getString("StartScene"));
+        btn1.setOnAction(e -> setStartScene());
+        Button btn2 = new Button(bundle.getString("TableScene"));
         btn2.setOnAction(e -> setTableScene());
-        Button btn3 = new Button("Страница с командами");
+        Button btn3 = new Button(bundle.getString("CommandsScene"));
         btn3.setOnAction(e -> setCommandsScene());
-        Button btn4 = retUserProfileButton();
+        Button btn4 = new Button(bundle.getString("MoviesDisplayScene"));
+        btn4.setOnAction(e -> setMovieDisplayScene());
+        Button btn5 = retUserProfileButton();
 
         FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL, 30, 30);
         flowPane.setLayoutX(20);
         flowPane.setLayoutY(20);
         flowPane.setPrefWidth(primaryStage.getWidth());
-        List<Button> buttonList = new ArrayList<>(Arrays.asList(btn1, btn2, btn3, btn4));
+        List<Button> buttonList = new ArrayList<>(Arrays.asList(btn1, btn2, btn3, btn5));
         buttonList.forEach(button -> flowPane.getChildren().add(button));
         return flowPane;
     }
@@ -191,7 +193,7 @@ public class FXApplication extends Application implements PropertyChangeListener
         userButton.setGraphic(userImageView);
         userButton.setOnAction(e -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Пользователь:");
+            alert.setHeaderText(bundle.getString("Username"));
             alert.setContentText(clientManager.getLogin());
             alert.showAndWait();
         });
