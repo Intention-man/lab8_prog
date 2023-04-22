@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="1) Observer finished&#10;2) StartForm finished (or almost)&#10;3) Locals are being developed">
+    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Locals are being developed (part 2)">
+      <change afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_HR.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_NL.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_en_NZE.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_en_NZE.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_ru_RU.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_ru_RU.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -197,7 +203,7 @@
       <workItem from="1682058335102" duration="7088000" />
       <workItem from="1682077151299" duration="8089000" />
       <workItem from="1682091561136" duration="9854000" />
-      <workItem from="1682139423951" duration="591000" />
+      <workItem from="1682139423951" duration="7402000" />
     </task>
     <task id="LOCAL-00001" summary="Added JDBC driver dependency">
       <created>1678457588345</created>
@@ -297,7 +303,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682101109649</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Locals are being developed (part 2)">
+      <created>1682141660145</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1682141660145</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -326,18 +339,10 @@
     <MESSAGE value="Problems with app render from another thread" />
     <MESSAGE value="Observer (something happens)" />
     <MESSAGE value="1) Observer finished&#10;2) StartForm finished (or almost)&#10;3) Locals are being developed" />
-    <option name="LAST_COMMIT_MESSAGE" value="1) Observer finished&#10;2) StartForm finished (or almost)&#10;3) Locals are being developed" />
+    <MESSAGE value="Locals are being developed (part 2)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Locals are being developed (part 2)" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/client/src/main/java/gui/TableScene.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="auxiliary_classes.ResponseMessage" memberName="typeName" />

@@ -9,7 +9,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-import java.sql.ResultSet;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 public class StartScene {
@@ -22,6 +24,7 @@ public class StartScene {
     String mode;
     ResponseMessage response = null;
     ResourceBundle bundle;
+    Locale locale;
 
     public StartScene(FXApplication app, ClientManager clientManager) {
         this.app = app;
@@ -107,6 +110,8 @@ public class StartScene {
         HashMap<String, String> langMap = new HashMap<>();
         langMap.put("English (NZE)", "Gui_en_NZE");
         langMap.put("Русский", "Gui_ru_RU");
+        langMap.put("Hrvatski", "Gui_HR");
+        langMap.put("Nederlands", "Gui_NL");
         for (String key : langMap.keySet()) {
             RadioButton rBtn = new RadioButton(key);
             rBtn.setToggleGroup(group);
@@ -115,6 +120,14 @@ public class StartScene {
                 bundle = ResourceBundle.getBundle(langMap.get(key));
                 app.setBundle(bundle);
                 app.renderByDataUpdate();
+
+                List<String> list = List.of(langMap.get(key).split("_"));
+                defineLocale(list.get(list.size() - 1));
+                ZonedDateTime zoned = ZonedDateTime.now();
+                DateTimeFormatter pattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale);
+                System.out.println(zoned.format(pattern));
+                DateTimeFormatter pattern2 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withLocale(locale);
+                System.out.println(zoned.format(pattern2));
             });
         }
         return langButtons;
@@ -127,5 +140,14 @@ public class StartScene {
         }
         System.out.println("got data");
         app.clientSerializer.setReadyToReturnMessage(false);
+    }
+
+    public void defineLocale(String lang){
+        switch (lang) {
+            case ("RU") -> locale = Locale.forLanguageTag("ru-RU");
+            case ("NZE") -> locale = Locale.forLanguageTag("en-NZE");
+            case ("HR") -> locale = Locale.forLanguageTag("hr-HR");
+            case ("NL") -> locale = Locale.forLanguageTag("nl-NL");
+        }
     }
 }

@@ -123,7 +123,7 @@ public class FXApplication extends Application implements PropertyChangeListener
         flowPane.setLayoutX(20);
         flowPane.setLayoutY(20);
         flowPane.setPrefWidth(primaryStage.getWidth());
-        List<Button> buttonList = new ArrayList<>(Arrays.asList(btn1, btn2, btn3, btn5));
+        List<Button> buttonList = new ArrayList<>(Arrays.asList(btn1, btn2, btn3, btn4, btn5));
         buttonList.forEach(button -> flowPane.getChildren().add(button));
         return flowPane;
     }

@@ -22,12 +22,14 @@ public class MovieInfoScene {
     HashMap<Integer, Object> map = new HashMap<>();
     String creator;
     ResponseMessage response = null;
+    ResourceBundle bundle;
 
     public MovieInfoScene(FXApplication app, ClientManager clientManager, int movieId, String creator) {
         this.app = app;
         this.clientManager = clientManager;
         this.movieId = movieId;
         this.creator = creator;
+        bundle = app.getBundle();
     }
 
     public Scene openScene() throws SQLException {
@@ -97,7 +99,7 @@ public class MovieInfoScene {
     }
 
     public Button retSaveButton(){
-        Button saveButton = new Button("Сохранить изменения");
+        Button saveButton = new Button(bundle.getString("saveChanges"));
         saveButton.setOnAction(e -> {
             map.forEach((key, value) -> System.out.println(key + " " + value));
             clientManager.commandsWithParam("update", map);
@@ -111,7 +113,7 @@ public class MovieInfoScene {
     }
 
     public Button retRemoveButton(){
-        Button removeButton = new Button("Удалить фильм");
+        Button removeButton = new Button(bundle.getString("delete"));
         removeButton.setOnAction(e -> {
             clientManager.commandsWithParam("remove", movieId);
             updateResponseData();
@@ -124,7 +126,7 @@ public class MovieInfoScene {
     }
 
     public Button retExitButton(){
-        Button exitButton = new Button("Выйти на главную страницу без сохранения изменений");
+        Button exitButton = new Button(bundle.getString("exitWithoutChanges"));
         exitButton.setOnAction(e -> {
             app.setMovieDisplayScene();
         });

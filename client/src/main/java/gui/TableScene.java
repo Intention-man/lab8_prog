@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class TableScene {
@@ -33,6 +34,7 @@ public class TableScene {
     List<String> columnNamesList;
     ObservableList<ObservableList<String>> data;
     ResponseMessage response = null;
+    ResourceBundle bundle;
 
 
     public TableScene(FXApplication app, ClientManager clientManager) {
@@ -44,6 +46,7 @@ public class TableScene {
         lbl = new Label();
         data = FXCollections.observableArrayList();
         columnNamesList = new ArrayList<>();
+        bundle = app.getBundle();
     }
 
     public Scene openScene() {
@@ -86,7 +89,7 @@ public class TableScene {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error on Building Data");
+            app.customizedAlert(bundle.getString("tableBuildingErr"));
         }
 
         Scene scene = new Scene(root, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
@@ -95,19 +98,19 @@ public class TableScene {
 
     public void filterRecords() {
         FlowPane filterZone = new FlowPane();
-        Label label = new Label("Введите строку с запросом для фильтрации в формате");
+        Label label = new Label(bundle.getString("filterStringInput"));
         TextField columnNameField = new TextField();
         TextField conditionField = new TextField();
-        Button btnFilterByNumberCompare = new Button("Отфильтровать по числовому условию");
-        Button btnFilterBySubstring = new Button("Отфильтровать по подстроке");
-        Button resetButton = new Button("БСролить параметры фильрации");
+        Button btnFilterByNumberCompare = new Button(bundle.getString("filterByNumberValue"));
+        Button btnFilterBySubstring = new Button(bundle.getString("filterBySubstring"));
+        Button resetButton = new Button(bundle.getString("resetFilteringParams"));
         btnFilterByNumberCompare.setOnAction(e -> {
             if (columnNamesList.contains(columnNameField.getText().trim())) {
                 String requestString = columnNameField.getText().trim() + " " + conditionField.getText().trim();
                 changeData(requestString, "d");
                 table.setItems(data);
             } else {
-                app.customizedAlert("Столбца с таким названием не существует!").showAndWait();
+                app.customizedAlert(bundle.getString("thereIsNotColumn")).showAndWait();
             }
         });
         btnFilterBySubstring.setOnAction(e -> {
@@ -116,7 +119,7 @@ public class TableScene {
                 changeData(requestString, "s");
                 table.setItems(data);
             } else {
-                app.customizedAlert("Столбца с таким названием не существует!").showAndWait();
+                app.customizedAlert(bundle.getString("thereIsNotColumn")).showAndWait();
             }
         });
         resetButton.setOnAction(e -> {
@@ -157,28 +160,10 @@ public class TableScene {
             }
             data = FXCollections.observableArrayList(newData);
         } catch (ClassCastException err) {
-            app.customizedAlert("Введены некорректные данные для фильтрации!").showAndWait();
+            app.customizedAlert(bundle.getString("incorrectFilterData")).showAndWait();
         } catch (Exception err) {
             err.printStackTrace();
-            app.customizedAlert("Разработчик приложение недоработал! Что-то непредвиденное произошло(").showAndWait();
+            app.customizedAlert(bundle.getString("stupidDevEr")).showAndWait();
         }
-    }
-
-    // graphic objects
-
-    public Button retUserProfileButton() {
-        Button userButton = new Button();
-        Image userImage = new Image("/images/user_icon.png");
-        ImageView userImageView = new ImageView(userImage);
-        userImageView.setFitHeight(50);
-        userImageView.setFitWidth(50);
-        userButton.setGraphic(userImageView);
-        userButton.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Пользователь:");
-            alert.setContentText(clientManager.getLogin());
-            alert.showAndWait();
-        });
-        return userButton;
     }
 }
