@@ -42,7 +42,7 @@ public class MoviesDisplayScene {
     public Scene openScene() throws SQLException {
 //        clientManager.startNewAction("login 88 88");
         response = null;
-        clientManager.commandsWithoutParam("getAllMoviesRS");
+        clientManager.commandsWithoutParam(app.getBundle().getString("getAllMoviesRS"));
         while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
             response = app.clientSerializer.getNewResponse();
         }

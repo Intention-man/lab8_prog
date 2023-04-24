@@ -4,17 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Locals are being developed (part 2)">
-      <change afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_HR.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_NL.properties" afterDir="false" />
+    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Almost all">
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/Translator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/resources/body.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/src/main/java/auxiliary_classes/LocationStore.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/resources/Gui_HR.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/resources/Gui_NL.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/resources/Gui_en_NZE.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/resources/Gui_ru_RU.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/ClientMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/MovieInfoScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/TableScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_HR.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_HR.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_NL.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_NL.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_en_NZE.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_en_NZE.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_ru_RU.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_ru_RU.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/auxiliary_classes/CommandMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/auxiliary_classes/CommandMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CommandDistributor.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CommandDistributor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBCollectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBCollectionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBUserHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/database/DBUserHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,11 +73,10 @@
     &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;ToolWindowRun.ShowToolbar&quot;: &quot;false&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;19&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Михаил/Documents/ИТ/Актуальные лабы/lab8_prog/client/src/main/resources/Gui_ru_RU.properties&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Михаил/Documents/ИТ/Актуальные лабы/lab8_prog/common/src/main/resources&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
@@ -78,15 +94,17 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\common\src\main\resources" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\server" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\common\src\main\java" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\server\src\main\java" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\maven_project\client\src\main\java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\java" />
+      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\server\src\main\resources" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\resources" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\resources\images" />
-      <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\server\src\main\resources" />
       <recent name="C:\Users\Михаил\Documents\ИТ\Актуальные лабы\lab8_prog\client\src\main\resources\fxml" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -203,7 +221,12 @@
       <workItem from="1682058335102" duration="7088000" />
       <workItem from="1682077151299" duration="8089000" />
       <workItem from="1682091561136" duration="9854000" />
-      <workItem from="1682139423951" duration="7402000" />
+      <workItem from="1682139423951" duration="7775000" />
+      <workItem from="1682152865584" duration="6973000" />
+      <workItem from="1682171286581" duration="2960000" />
+      <workItem from="1682230607538" duration="19996000" />
+      <workItem from="1682255248019" duration="2508000" />
+      <workItem from="1682347386750" duration="325000" />
     </task>
     <task id="LOCAL-00001" summary="Added JDBC driver dependency">
       <created>1678457588345</created>
@@ -310,7 +333,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682141660145</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Almost all">
+      <created>1682150124020</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1682150124020</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -340,7 +370,8 @@
     <MESSAGE value="Observer (something happens)" />
     <MESSAGE value="1) Observer finished&#10;2) StartForm finished (or almost)&#10;3) Locals are being developed" />
     <MESSAGE value="Locals are being developed (part 2)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Locals are being developed (part 2)" />
+    <MESSAGE value="Almost all" />
+    <option name="LAST_COMMIT_MESSAGE" value="Almost all" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

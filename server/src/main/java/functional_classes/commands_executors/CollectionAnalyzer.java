@@ -43,10 +43,10 @@ public class CollectionAnalyzer {
             if ((long) data.get(4) > maxLength) {
                 return addMovie(data);
             } else {
-                return "Фильм не самый длинный";
+                return "notLongest";
             }
         } catch (Exception e) {
-            return "Ошибка, е-мае!(";
+            return "serverException";
         }
     }
 
@@ -58,10 +58,10 @@ public class CollectionAnalyzer {
             if ((long) data.get(4) < minLength) {
                 return addMovie(data);
             } else {
-                return "Фильм не кратчайший по длине";
+                return "notShortest";
             }
         } catch (Exception e) {
-            return "Ошибка, е-мае!(";
+            return "serverException";
         }
     }
 
@@ -74,7 +74,7 @@ public class CollectionAnalyzer {
             movies.getMoviesList().add(newMovie);
             System.out.println(movies.getMoviesList().size());
             serverSerializer.notifyAboutCollectionUpdate();
-            return "Успех!";
+            return "success";
         } else {
             return response;
         }
@@ -88,9 +88,9 @@ public class CollectionAnalyzer {
                 }
             });
             serverSerializer.notifyAboutCollectionUpdate();
-            return "Успешно удалены все фильмы, созданные вами";
+            return "success";
         } else {
-            return "Ошибка базы данных при удалении";
+            return "dbException";
         }
     }
 
@@ -120,7 +120,7 @@ public class CollectionAnalyzer {
     public String getLast12Commands() {
         System.out.println("print all:" + commandsHistory);
         StringBuilder message = new StringBuilder();
-        ArrayList list = new ArrayList<String>(commandsHistory.subList(commandsHistory.size() >= 12 ? commandsHistory.size() - 12 : 0, commandsHistory.size()));
+        ArrayList list = new ArrayList<>(commandsHistory.subList(commandsHistory.size() >= 12 ? commandsHistory.size() - 12 : 0, commandsHistory.size()));
         for (var str : list) {
             message.append(str).append("\n");
         }
@@ -134,10 +134,10 @@ public class CollectionAnalyzer {
     public String info() {
         System.out.println("info!!!");
         ArrayList<String> answer = new ArrayList<>();
-        answer.add("Класс элементов коллекции: " + (movies.getMoviesList().size() > 0 ? movies.getMoviesList().stream().toList().get(0).getClass() : "Movie"));
-        answer.add("Дата и время ининциализации коллекции: " + movies.getInitializationDate());
-        answer.add("Количество элементов в колллекции: " + movies.moviesCount());
-        answer.add("Список имеющихся в коллекции фильмов (id + название)");
+        answer.add("Collection class:" + (movies.getMoviesList().size() > 0 ? movies.getMoviesList().stream().toList().get(0).getClass() : "Movie"));
+        answer.add("Initial date and time" + movies.getInitializationDate());
+        answer.add("Count: " + movies.moviesCount());
+        answer.add("List (id + name)");
         movies.getSortedMovies("name")
                 .forEach(movie -> answer.add(movie.getId() + " - " + movie.getName()));
         StringBuilder message = new StringBuilder();
@@ -158,14 +158,14 @@ public class CollectionAnalyzer {
                 if (dbCollectionHandler.removeMovie(enteredId)) {
                     movies.getMoviesList().remove(foundMovie);
                     serverSerializer.notifyAboutCollectionUpdate();
-                    return "Фильм " + foundMovie.getName() + " удален";
+                    return "success";
                 }
-                return "Ошибка при удалении";
+                return "serverException";
             } else {
-                return "Вы не являетесь создателем экземпляра коллекции";
+                return "youNotHost";
             }
         } else {
-            return "Фильма с таким id нет в коллекции";
+            return "noOneSuchMovie";
         }
     }
 
@@ -180,14 +180,14 @@ public class CollectionAnalyzer {
                     String name = foundMovie.getName();
                     movies.getMoviesList().remove(foundMovie);
                     serverSerializer.notifyAboutCollectionUpdate();
-                    return "Фильм " + name + " удален";
+                    return "success";
                 }
-                return "Ошибка при удалении";
+                return "serverException";
             } else {
-                return "Вы не являетесь создателем экземпляра коллекции";
+                return "youNotHost";
             }
         } else {
-            return "Нет ни 1 фильма с таким количеством оскаров";
+            return "noOneSuchMovie";
         }
     }
 
@@ -213,14 +213,14 @@ public class CollectionAnalyzer {
                 if (dbCollectionHandler.updateMovie(newMovie)) {
                     foundMovie.update(data);
                     serverSerializer.notifyAboutCollectionUpdate();
-                    return "Успешно обновлено";
+                    return "success";
                 }
-                return "Обновление не удалось";
+                return "serverException";
             } else {
-                return "Вы не являетесь создателем экземпляра коллекции";
+                return "youNotHost";
             }
         } else {
-            return "В коллекции нет фильма с таким id";
+            return "noOneSuchMovie";
         }
     }
 

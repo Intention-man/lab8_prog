@@ -35,7 +35,7 @@ public class DBUserHandler {
     
     public synchronized String registration(String login, String password) throws SQLException {
         if (isLoginOccupied(login)){
-            return "Пользователь с таким username уже существует. Если это вы, то введите команду с верным логином и паролем, иначе придумайте другой логин, чтобы зарегистриоваться";
+            return "userAlreadyExist";
         }
         else {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO users VALUES (default, ?, ?)");
@@ -44,8 +44,8 @@ public class DBUserHandler {
             statement.executeUpdate();
             statement.close();
             if (isUserExists(login, password)) {
-                return "Регистрация успешна. Можете авторизироваться";
-            } else {return "Ошибка при попытке регистрации";}
+                return "success";
+            } else {return "serverException";}
         }
     }
 

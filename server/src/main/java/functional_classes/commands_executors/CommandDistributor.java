@@ -3,7 +3,7 @@ package functional_classes.commands_executors;
 import auxiliary_classes.CommandMessage;
 import exceptions.AuthorizationException;
 import functional_classes.database.DBUserHandler;
-import auxiliary_classes.ResultSetWrapper;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

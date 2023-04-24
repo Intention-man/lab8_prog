@@ -1,6 +1,7 @@
 package auxiliary_classes;
 
 import java.io.Serializable;
+import java.util.ResourceBundle;
 
 public class CommandMessage<T> implements Serializable {
     private String commandName;
@@ -52,4 +53,5 @@ public class CommandMessage<T> implements Serializable {
     public void setCommandData(T commandData) {
         this.commandData = commandData;
     }
+
 }

@@ -44,7 +44,7 @@ public class DBCollectionHandler {
 
     public synchronized String addMovieToBD(Movie movie, String login) throws SQLException {
         if (isMovieExist(movie.getName())) {
-            return "Фильм с таким названием уже существует";
+            return "movieAlreadyExist";
         } else {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO movies VALUES (default, ?, ?, ?, default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
@@ -55,7 +55,7 @@ public class DBCollectionHandler {
             if (isMovieExist(movie.getName())) {
                 return "1";
             } else {
-                return "Ошибка при попытке добавления фильма";
+                return "serverException";
             }
         }
     }

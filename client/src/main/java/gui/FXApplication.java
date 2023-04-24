@@ -1,5 +1,6 @@
 package gui;
 
+import auxiliary_classes.LocationStore;
 import functional_classes.ClientManager;
 import functional_classes.ClientReader;
 import functional_classes.ClientSerializer;
@@ -29,6 +30,9 @@ public class FXApplication extends Application implements PropertyChangeListener
     Stage primaryStage;
     static ClientManager clientManager;
     Scene currentScene;
+    FlowPane localeZone;
+    LocationStore locationStore;
+    String langShortTag;
     String currentSceneName;
     ClientReader reader = new ClientReader();
     Writer writer = new Writer();
@@ -46,6 +50,7 @@ public class FXApplication extends Application implements PropertyChangeListener
     @Override
     public void start(Stage primaryStage) {
         bundle = ResourceBundle.getBundle("Gui_ru_RU");
+        setLangShortTag("en");
         try {
             port = 5000;
             while (true) {
@@ -56,10 +61,11 @@ public class FXApplication extends Application implements PropertyChangeListener
                 } catch (BindException ignored) {
                 }
             }
-            System.out.println(port);
+//            System.out.println(port);
 
             clientSerializer.setApp(this);
-            clientManager = new ClientManager(clientSerializer, reader, writer);
+            clientSerializer.setBundle(bundle);
+            clientManager = new ClientManager(clientSerializer, reader, writer, this);
             reader.setClientManager(clientManager);
         } catch (SocketException | UnknownHostException e) {
             throw new RuntimeException(e);
@@ -67,10 +73,9 @@ public class FXApplication extends Application implements PropertyChangeListener
         this.primaryStage = primaryStage;
         primaryStage.setX(20);
         primaryStage.setY(20);
-        primaryStage.setWidth(1200);
+        primaryStage.setWidth(1000);
         primaryStage.setHeight(600);
         currentScene = setStartScene();
-        primaryStage.setTitle(bundle.getString("MovieStore"));
         InputStream iconStream = getClass().getResourceAsStream("/images/river.jpg");
         assert iconStream != null;
         Image image = new Image(iconStream);
@@ -84,7 +89,6 @@ public class FXApplication extends Application implements PropertyChangeListener
             while (true) {
                 String answer = clientSerializer.getAndReturnMessageLoop();
                 if (Objects.equals(answer, "U")) {
-                    System.out.println("inside task");
                 }
             }
         });
@@ -92,10 +96,9 @@ public class FXApplication extends Application implements PropertyChangeListener
     }
 
     public void render() {
-        System.out.println(1 + " " + currentScene);
+        System.out.println(currentScene);
         primaryStage.setScene(currentScene);
         primaryStage.show();
-        System.out.println("render");
     }
 
     public void renderByDataUpdate() {
@@ -109,6 +112,7 @@ public class FXApplication extends Application implements PropertyChangeListener
     }
 
     public FlowPane navigateButtonList() {
+        Button btn0 = retUserProfileButton();
         Button btn1 = new Button(bundle.getString("StartScene"));
         btn1.setOnAction(e -> setStartScene());
         Button btn2 = new Button(bundle.getString("TableScene"));
@@ -117,14 +121,17 @@ public class FXApplication extends Application implements PropertyChangeListener
         btn3.setOnAction(e -> setCommandsScene());
         Button btn4 = new Button(bundle.getString("MoviesDisplayScene"));
         btn4.setOnAction(e -> setMovieDisplayScene());
-        Button btn5 = retUserProfileButton();
 
         FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL, 30, 30);
         flowPane.setLayoutX(20);
         flowPane.setLayoutY(20);
         flowPane.setPrefWidth(primaryStage.getWidth());
-        List<Button> buttonList = new ArrayList<>(Arrays.asList(btn1, btn2, btn3, btn4, btn5));
+        if (localeZone != null){
+            flowPane.getChildren().add(localeZone);
+        }
+        List<Button> buttonList = new ArrayList<>(Arrays.asList(btn0, btn1, btn2, btn3, btn4));
         buttonList.forEach(button -> flowPane.getChildren().add(button));
+
         return flowPane;
     }
 
@@ -180,6 +187,18 @@ public class FXApplication extends Application implements PropertyChangeListener
         return currentScene;
     }
 
+    public void setLocaleZone(FlowPane localeZone) {
+        this.localeZone = localeZone;
+    }
+
+    public void setLocationStore(LocationStore locationStore) {
+        this.locationStore = locationStore;
+    }
+
+    public void setLangShortTag(String langShortTag) {
+        this.langShortTag = langShortTag;
+    }
+
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
     }
@@ -206,6 +225,14 @@ public class FXApplication extends Application implements PropertyChangeListener
 
     public ResourceBundle getBundle() {
         return bundle;
+    }
+
+    public LocationStore getLocationStore() {
+        return locationStore;
+    }
+
+    public String getLangShortTag() {
+        return langShortTag;
     }
 
     public Alert customizedAlert(String message) {

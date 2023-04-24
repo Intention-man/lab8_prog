@@ -2,10 +2,12 @@ package functional_classes;
 
 
 import auxiliary_classes.CommandMessage;
+import auxiliary_classes.LocationStore;
 import auxiliary_classes.ResponseMessage;
 import gui.FXApplication;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Region;
+import org.intellij.lang.annotations.Language;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,7 +16,9 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 
 public class ClientSerializer {
@@ -29,6 +33,7 @@ public class ClientSerializer {
     boolean readyToReturnMessage;
     FXApplication app;
     private PropertyChangeSupport support;
+    ResourceBundle bundle;
 
 
     public ClientSerializer(int clientPort) throws SocketException, UnknownHostException {
@@ -40,7 +45,6 @@ public class ClientSerializer {
         support = new PropertyChangeSupport(this);
         readyToReturnMessage = false;
     }
-
 
     public ResponseMessage send(CommandMessage<Object> commandMessage) {
         // creation channel and open it
@@ -83,18 +87,34 @@ public class ClientSerializer {
             byte[] a = byteArrayInputStream.readAllBytes();
             ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(a));
             ResponseMessage deserializedResponse = (ResponseMessage) objectInputStream.readObject();
-            if (Objects.equals(deserializedResponse.getTypeName(), "NOTIFY")){
-                    System.out.println("NOTIFY to update");
-                    support.firePropertyChange("notify to update", this.newResponse, deserializedResponse);
+            if (Objects.equals(deserializedResponse.getTypeName(), "NOTIFY")) {
+//                System.out.println("NOTIFY to update");
+                support.firePropertyChange("notify to update", this.newResponse, deserializedResponse);
                 return "U";
-            }
-            else if (!Objects.equals(deserializedResponse.getResponseData().toString(), "")){
-                System.out.println(1);
-                System.out.println("deserializedResponse.getResponseData: " + deserializedResponse.getResponseData());
+            } else if (Objects.equals(deserializedResponse.getTypeName(), "java.lang.String")) {
+                if (!Objects.equals(deserializedResponse.getResponseData().toString(), "")) {
+//                    System.out.println(app.getLangShortTag());
+//                    System.out.println(deserializedResponse.getResponseData().toString());
+                    List<String> stringList = List.of(deserializedResponse.getResponseData().toString().split("\n"));
+                    StringBuilder translatedText = new StringBuilder();
+                    stringList.forEach(string -> {
+                        if (bundle.containsKey(string)){
+                            translatedText.append(bundle.getString(string));
+                        } else {
+                            translatedText.append(string);
+                        }
+                        translatedText.append("\n");
+                    });
+                    deserializedResponse.setResponseData(translatedText);
+                    setNewResponse(deserializedResponse);
+                    setReadyToReturnMessage(true);
+                }
+            } else {
                 setNewResponse(deserializedResponse);
                 setReadyToReturnMessage(true);
             }
-        } catch (IOException | ClassNotFoundException err) {
+        } catch (IOException |
+                 ClassNotFoundException err) {
             err.printStackTrace();
         }
         return "null";
@@ -111,6 +131,10 @@ public class ClientSerializer {
     public void setNewResponse(ResponseMessage value) {
         // support.firePropertyChange("newResponse", this.newResponse, value);
         this.newResponse = value;
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
     }
 
     public boolean isReadyToReturnMessage() {

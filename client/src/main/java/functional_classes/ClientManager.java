@@ -2,6 +2,7 @@ package functional_classes;
 
 import auxiliary_classes.CommandMessage;
 import auxiliary_classes.ResponseMessage;
+import gui.FXApplication;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ import java.util.*;
 public class ClientManager {
 
     // initialization
-
+    FXApplication app;
     ClientReader clientReader;
     Writer writer;
     ClientSerializer clientSerializer;
@@ -39,11 +40,11 @@ public class ClientManager {
         commandList.put("count_by_oscars_count oscarsCount", "вывести количество элементов, значение поля oscarsCount которых равно заданному");
     }
 
-    public ClientManager(ClientSerializer clientSerializer, ClientReader clientReader, Writer writer) {
+    public ClientManager(ClientSerializer clientSerializer, ClientReader clientReader, Writer writer, FXApplication app) {
         this.clientSerializer = clientSerializer;
         this.clientReader = clientReader;
         this.writer = writer;
-
+        this.app = app;
     }
 
     // main action
@@ -216,7 +217,7 @@ public class ClientManager {
     public ResponseMessage commandsWithParam(String commandName, java.io.Serializable commandData) {
         CommandMessage<Object> commandMessage;
         if (login != null && password != null) {
-            commandMessage = new CommandMessage<>("CollectionAnalyzer", "addCommandToHistory", commandName, login, password);
+            commandMessage = new CommandMessage<>("CollectionAnalyzer", "addCommandToHistory", app.getBundle().getString(commandName), login, password);
             clientSerializer.send(commandMessage);
         }
         switch (commandName) {

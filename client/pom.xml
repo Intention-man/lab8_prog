@@ -48,5 +48,24 @@
             <artifactId>json</artifactId>
             <version>20220320</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+            <dependency>
+                <groupId>com.github.Cloudmersive</groupId>
+                <artifactId>Cloudmersive.APIClient.Java</artifactId>
+                <version>v3.54</version>
+            </dependency>
     </dependencies>
+
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 </project>

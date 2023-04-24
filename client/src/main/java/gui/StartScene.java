@@ -1,14 +1,18 @@
 package gui;
 
+import auxiliary_classes.LocationStore;
 import auxiliary_classes.ResponseMessage;
 import functional_classes.ClientManager;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -24,7 +28,17 @@ public class StartScene {
     String mode;
     ResponseMessage response = null;
     ResourceBundle bundle;
+    static List<LocationStore> locationStores = new ArrayList<>();
     Locale locale;
+
+    FlowPane localeZone;
+
+    static {
+        locationStores.add(new LocationStore("Русский", "ru-RU", "Europe/Moscow", "Gui_ru_RU"));
+        locationStores.add(new LocationStore("English (NZE)", "en-NZE", "Etc/GMT+12", "Gui_en_NZE"));
+        locationStores.add(new LocationStore("Hrvatski", "hr-HR", "Europe/Zagreb", "Gui_HR"));
+        locationStores.add(new LocationStore("Netherlands", "nl_NL", "Europe/Amsterdam", "Gui_NL"));
+    }
 
     public StartScene(FXApplication app, ClientManager clientManager) {
         this.app = app;
@@ -33,6 +47,7 @@ public class StartScene {
     }
 
     public Scene openScene() {
+        System.out.println("openScene: " + mode);
         GridPane root = new GridPane();
         bundle = app.getBundle();
         usernameLabel = new Label(bundle.getString("Username"));
@@ -41,10 +56,12 @@ public class StartScene {
         passwordField = new PasswordField();
         Button changeModBtn = new Button((Objects.equals(mode, "L") ? bundle.getString("toRegister") : bundle.getString("toLogin")));
         changeModBtn.setOnAction(e -> {
+            System.out.println("beforeButtonCLick: " + mode);
             mode = (Objects.equals(mode, "L") ? "R" : "L");
-            this.openScene();
+            System.out.println("onButtonCLick: " + mode);
+//            this.openScene();
+            app.render();
         });
-
         root.setHgap(10);
         root.setVgap(10);
         root.setPadding(new Insets(10));
@@ -104,50 +121,49 @@ public class StartScene {
         return regButton;
     }
 
-    public HBox retLangButtons(){
+    public HBox retLangButtons() {
         ToggleGroup group = new ToggleGroup();
         HBox langButtons = new HBox(10);
-        HashMap<String, String> langMap = new HashMap<>();
-        langMap.put("English (NZE)", "Gui_en_NZE");
-        langMap.put("Русский", "Gui_ru_RU");
-        langMap.put("Hrvatski", "Gui_HR");
-        langMap.put("Nederlands", "Gui_NL");
-        for (String key : langMap.keySet()) {
-            RadioButton rBtn = new RadioButton(key);
+        System.out.println(ZoneId.getAvailableZoneIds());
+        for (LocationStore locationStore : locationStores) {
+            RadioButton rBtn = new RadioButton(locationStore.getLangName());
             rBtn.setToggleGroup(group);
             langButtons.getChildren().add(rBtn);
             rBtn.setOnAction(event -> {
-                bundle = ResourceBundle.getBundle(langMap.get(key));
+                bundle = ResourceBundle.getBundle(locationStore.getResourseFileName());
                 app.setBundle(bundle);
                 app.renderByDataUpdate();
-
-                List<String> list = List.of(langMap.get(key).split("_"));
-                defineLocale(list.get(list.size() - 1));
-                ZonedDateTime zoned = ZonedDateTime.now();
-                DateTimeFormatter pattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale);
-                System.out.println(zoned.format(pattern));
-                DateTimeFormatter pattern2 = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withLocale(locale);
-                System.out.println(zoned.format(pattern2));
+                app.setLangShortTag(List.of(locationStore.getLangTag().split("-")).get(0));
+                retLocaleDataZone(locationStore);
             });
+
         }
         return langButtons;
     }
 
-    public void updateResponseData(){
+    public void updateResponseData() {
         response = null;
-        while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
+        while (response == null || !app.clientSerializer.isReadyToReturnMessage()) {
             response = app.clientSerializer.getNewResponse();
         }
         System.out.println("got data");
         app.clientSerializer.setReadyToReturnMessage(false);
     }
 
-    public void defineLocale(String lang){
-        switch (lang) {
-            case ("RU") -> locale = Locale.forLanguageTag("ru-RU");
-            case ("NZE") -> locale = Locale.forLanguageTag("en-NZE");
-            case ("HR") -> locale = Locale.forLanguageTag("hr-HR");
-            case ("NL") -> locale = Locale.forLanguageTag("nl-NL");
-        }
+    public void retLocaleDataZone(LocationStore locationStore) {
+        locale = Locale.forLanguageTag(locationStore.getLangTag());
+        LocalDateTime nowTime = LocalDateTime.now(ZoneId.of(locationStore.getZoneId()));
+        ZonedDateTime zoned = ZonedDateTime.now();
+        DateTimeFormatter pattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale);
+        System.out.println(zoned.format(pattern));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        System.out.println(nowTime.format(formatter));
+        app.primaryStage.setTitle(bundle.getString("MovieStore"));
+
+        Label dataLabel = new Label(zoned.format(pattern));
+        Label timeLabel = new Label(nowTime.format(formatter));
+        localeZone = new FlowPane(dataLabel, timeLabel);
+        app.setLocaleZone(localeZone);
+        app.setLocationStore(locationStore);
     }
 }
