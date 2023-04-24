@@ -42,7 +42,7 @@ public class MoviesDisplayScene {
     public Scene openScene() throws SQLException {
 //        clientManager.startNewAction("login 88 88");
         response = null;
-        clientManager.commandsWithoutParam(app.getBundle().getString("getAllMoviesRS"));
+        clientManager.commandsWithoutParam("getAllMoviesRS");
         while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
             response = app.clientSerializer.getNewResponse();
         }
@@ -113,7 +113,7 @@ public class MoviesDisplayScene {
             });
 
             gridPane.add(stackPane, (int) posX, (int) posY);
-//            System.out.println(Arrays.asList((int) posX, (int) posY));
+            System.out.println(Arrays.asList((int) posX, (int) posY));
         }
         root.getChildren().add(gridPane);
         return new Scene(root, 300, 150, Color.rgb(240, 217, 164));

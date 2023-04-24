@@ -30,7 +30,6 @@ public class StartScene {
     ResourceBundle bundle;
     static List<LocationStore> locationStores = new ArrayList<>();
     Locale locale;
-
     FlowPane localeZone;
 
     static {
@@ -40,28 +39,24 @@ public class StartScene {
         locationStores.add(new LocationStore("Netherlands", "nl_NL", "Europe/Amsterdam", "Gui_NL"));
     }
 
-    public StartScene(FXApplication app, ClientManager clientManager) {
+    public StartScene(FXApplication app, ClientManager clientManager, String loginMode) {
         this.app = app;
         this.clientManager = clientManager;
-        mode = "L";
+        mode = loginMode;
     }
 
     public Scene openScene() {
-        System.out.println("openScene: " + mode);
         GridPane root = new GridPane();
+        root.getChildren().removeAll();
+        System.out.println("openScene: " + mode);
         bundle = app.getBundle();
-        usernameLabel = new Label(bundle.getString("Username"));
+//        usernameLabel = new Label(bundle.getString("Username"));
+        usernameLabel = new Label(mode);
         usernameField = new TextField();
         passwordLabel = new Label(bundle.getString("Password"));
         passwordField = new PasswordField();
         Button changeModBtn = new Button((Objects.equals(mode, "L") ? bundle.getString("toRegister") : bundle.getString("toLogin")));
-        changeModBtn.setOnAction(e -> {
-            System.out.println("beforeButtonCLick: " + mode);
-            mode = (Objects.equals(mode, "L") ? "R" : "L");
-            System.out.println("onButtonCLick: " + mode);
-//            this.openScene();
-            app.render();
-        });
+
         root.setHgap(10);
         root.setVgap(10);
         root.setPadding(new Insets(10));
@@ -72,16 +67,30 @@ public class StartScene {
 
         HBox buttonLayout = new HBox(10);
         System.out.println(mode);
-        buttonLayout.getChildren().add(Objects.equals(mode, "L") ? authorization() : registration());
-
+        if (Objects.equals(mode, "R")){
+            buttonLayout.getChildren().add(registration());
+        } else {
+            buttonLayout.getChildren().add(authorization());
+        }
         root.add(buttonLayout, 1, 2);
         root.add(changeModBtn, 2, 2);
         root.add(retLangButtons(), 0, 3);
+        System.out.println(root.getChildren().size());
         Scene scene = new Scene(root, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
+
+        changeModBtn.setOnAction(e -> {
+            System.out.println("beforeButtonCLick: " + mode);
+            mode = (Objects.equals(mode, "L") ? "R" : "L");
+            System.out.println("onButtonCLick: " + mode);
+            app.setStartScene(mode);
+//            app.render();
+        });
+
         return scene;
     }
 
     public Button authorization() {
+        System.out.println("authorization");
         Button loginButton = new Button(bundle.getString("Login"));
         // Set the action for the login button
         loginButton.setOnAction(event -> {
@@ -93,29 +102,28 @@ public class StartScene {
             if (response.getResponseData().equals(true)) {
                 app.setTableScene();
             } else {
-                app.customizedAlert((String) response.getResponseData()).showAndWait();
+                app.customizedAlert(bundle.getString("loginException")).showAndWait();
             }
         });
         return loginButton;
     }
 
-    public Button registration() {
+    public Button registration()  {
+        System.out.println("registration");
         Button regButton = new Button(bundle.getString("Registration"));
-        System.out.println("Registration");
+
         // Set the action for the login button
         regButton.setOnAction(event -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-
             clientManager.commandsWithParam("registration", (username + " " + password));
             updateResponseData();
 
             if (response.getResponseData().equals(true)) {
                 mode = "L";
-                openScene();
+                app.setStartScene("L");
             } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, (String) response.getResponseData());
-                alert.showAndWait();
+               app.customizedAlert(response.getResponseData().toString()).showAndWait();
             }
         });
         return regButton;
@@ -124,7 +132,6 @@ public class StartScene {
     public HBox retLangButtons() {
         ToggleGroup group = new ToggleGroup();
         HBox langButtons = new HBox(10);
-        System.out.println(ZoneId.getAvailableZoneIds());
         for (LocationStore locationStore : locationStores) {
             RadioButton rBtn = new RadioButton(locationStore.getLangName());
             rBtn.setToggleGroup(group);
@@ -155,9 +162,7 @@ public class StartScene {
         LocalDateTime nowTime = LocalDateTime.now(ZoneId.of(locationStore.getZoneId()));
         ZonedDateTime zoned = ZonedDateTime.now();
         DateTimeFormatter pattern = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale);
-        System.out.println(zoned.format(pattern));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        System.out.println(nowTime.format(formatter));
         app.primaryStage.setTitle(bundle.getString("MovieStore"));
 
         Label dataLabel = new Label(zoned.format(pattern));

@@ -41,6 +41,7 @@ public class FXApplication extends Application implements PropertyChangeListener
     int lastMovieId;
     String lastCreator;
     ResourceBundle bundle;
+    String loginMode = "L";
 
 
     public static void main(String[] args) {
@@ -75,7 +76,7 @@ public class FXApplication extends Application implements PropertyChangeListener
         primaryStage.setY(20);
         primaryStage.setWidth(1000);
         primaryStage.setHeight(600);
-        currentScene = setStartScene();
+        currentScene = setStartScene("L");
         InputStream iconStream = getClass().getResourceAsStream("/images/river.jpg");
         assert iconStream != null;
         Image image = new Image(iconStream);
@@ -96,14 +97,14 @@ public class FXApplication extends Application implements PropertyChangeListener
     }
 
     public void render() {
-        System.out.println(currentScene);
+//        System.out.println(currentScene);
         primaryStage.setScene(currentScene);
         primaryStage.show();
     }
 
     public void renderByDataUpdate() {
         switch (currentSceneName) {
-            case ("StartScene") -> setStartScene();
+            case ("StartScene") -> setStartScene(loginMode);
             case ("MoviesDisplayScene") -> setMovieDisplayScene();
             case ("TableScene") -> setTableScene();
             case ("MovieInfoScene") -> setMovieInfoScene(lastMovieId, lastCreator);
@@ -114,7 +115,7 @@ public class FXApplication extends Application implements PropertyChangeListener
     public FlowPane navigateButtonList() {
         Button btn0 = retUserProfileButton();
         Button btn1 = new Button(bundle.getString("StartScene"));
-        btn1.setOnAction(e -> setStartScene());
+        btn1.setOnAction(e -> setStartScene("L"));
         Button btn2 = new Button(bundle.getString("TableScene"));
         btn2.setOnAction(e -> setTableScene());
         Button btn3 = new Button(bundle.getString("CommandsScene"));
@@ -135,8 +136,9 @@ public class FXApplication extends Application implements PropertyChangeListener
         return flowPane;
     }
 
-    public Scene setStartScene() {
-        StartScene startScene = new StartScene(this, clientManager);
+    public Scene setStartScene(String loginMode) {
+        this.loginMode = loginMode;
+        StartScene startScene = new StartScene(this, clientManager, loginMode);
         currentScene = startScene.openScene();
         currentSceneName = "StartScene";
         render();

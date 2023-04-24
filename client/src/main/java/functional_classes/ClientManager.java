@@ -216,7 +216,7 @@ public class ClientManager {
 
     public ResponseMessage commandsWithParam(String commandName, java.io.Serializable commandData) {
         CommandMessage<Object> commandMessage;
-        if (login != null && password != null) {
+        if (login != null && password != null && !Objects.equals(commandName, "login") && !Objects.equals(commandName, "registration")) {
             commandMessage = new CommandMessage<>("CollectionAnalyzer", "addCommandToHistory", app.getBundle().getString(commandName), login, password);
             clientSerializer.send(commandMessage);
         }

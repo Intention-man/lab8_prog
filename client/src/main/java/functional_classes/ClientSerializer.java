@@ -2,12 +2,9 @@ package functional_classes;
 
 
 import auxiliary_classes.CommandMessage;
-import auxiliary_classes.LocationStore;
 import auxiliary_classes.ResponseMessage;
 import gui.FXApplication;
-import javafx.scene.control.Alert;
-import javafx.scene.layout.Region;
-import org.intellij.lang.annotations.Language;
+
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
