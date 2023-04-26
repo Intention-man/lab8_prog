@@ -40,8 +40,9 @@ public class  CommandsScene {
     public CommandsScene(FXApplication app, ClientManager clientManager) {
         this.app = app;
         this.clientManager = clientManager;
-        clientReader = new ClientReader();
         bundle = app.getBundle();
+        clientReader = new ClientReader(bundle);
+
 
         form.add(new FormField(0, "String", true, bundle.getString("nameInput")));
         form.add(new FormField(1, "Integer", true, bundle.getString("coordXInput")));
@@ -318,14 +319,20 @@ public class  CommandsScene {
             });
         } else {
             nextStep.setText(bundle.getString("createMovie"));
-            app.customizedAlert(clientManager.commandsWithParam(commandName, answers).getResponseData().toString()).showAndWait();
+            response = null;
+            clientManager.commandsWithParam(commandName, answers);
+            while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
+                response = app.clientSerializer.getNewResponse();
+            }
+            app.clientSerializer.setReadyToReturnMessage(false);
+            app.customizedAlert(response.getResponseData().toString()).showAndWait();
         }
     }
 
     public void validate(String line, int nextStep) {
         try {
             if (line.length() == 0 && form.get(nextStep).getIsNecessary()) {
-                app.customizedAlert(bundle.getString("mustNotNull"));
+                app.customizedAlert(bundle.getString("mustNotNull")).showAndWait();
                 return;
             } else {
                 if (line.length() == 0) {
@@ -339,7 +346,7 @@ public class  CommandsScene {
                 case ("Integer"), ("int") -> {
                     int parsedValue = Integer.parseInt(line);
                     if (form.get(nextStep).getKey() == 1 && parsedValue <= -319) {
-                        app.customizedAlert(bundle.getString("mustMoreMinus319"));
+                        app.customizedAlert(bundle.getString("mustMoreMinus319")).showAndWait();
                     } else {
                         answers.put(nextStep, parsedValue);
                         nextStep += 1;
@@ -349,7 +356,7 @@ public class  CommandsScene {
                 case ("long") -> {
                     long parsedValue = Long.parseLong(line);
                     if ((form.get(nextStep).getKey() == 3 || form.get(nextStep).getKey() == 4) && parsedValue <= 0) {
-                        app.customizedAlert(bundle.getString("mustMore0"));
+                        app.customizedAlert(bundle.getString("mustMore0")).showAndWait();
                     } else {
                         answers.put(nextStep, parsedValue);
                         nextStep += 1;
@@ -362,10 +369,10 @@ public class  CommandsScene {
                 }
                 case ("String") -> {
                     if ((form.get(nextStep).getKey() == 0 || form.get(nextStep).getKey() == 7 || form.get(nextStep).getKey() == 8) && line.trim().isEmpty()) {
-                        app.customizedAlert(bundle.getString("mustNotNull"));
+                        app.customizedAlert(bundle.getString("mustNotNull")).showAndWait();
                     } else {
                         if (form.get(nextStep).getKey() == 8 && line.length() < 9) {
-                            app.customizedAlert(bundle.getString("mustHaveLenMore9"));
+                            app.customizedAlert(bundle.getString("mustHaveLenMore9")).showAndWait();
                         } else {
                             answers.put(nextStep, line);
                             nextStep += 1;
@@ -389,9 +396,9 @@ public class  CommandsScene {
                 }
             }
         } catch (NumberFormatException e) {
-            app.customizedAlert(bundle.getString("inputCorrectType") + form.get(nextStep).getExpectedType());
+            app.customizedAlert(bundle.getString("inputCorrectType") + " " + form.get(nextStep).getExpectedType()).showAndWait();
         } catch (IllegalArgumentException e) {
-            app.customizedAlert(bundle.getString("inputCorrectValueFromList"));
+            app.customizedAlert(bundle.getString("inputCorrectValueFromList")).showAndWait();
         }
         step = nextStep;
     }

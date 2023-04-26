@@ -19,6 +19,7 @@ public class ClientReader {
     private List<String> executedFiles = new ArrayList<>();
     static ArrayList<FormField> form = new ArrayList<>();
     static HashMap<Integer, Object> answers = new HashMap<>();
+    ResourceBundle bundle;
 
     static {
         form.add(new FormField(0, "String", true, "Введите название фильма"));
@@ -36,7 +37,8 @@ public class ClientReader {
         form.add(new FormField(12, "double", false, "Введите местоположение оператора (координата z)"));
     }
 
-    public ClientReader() {
+    public ClientReader(ResourceBundle bundle) {
+        this.bundle = bundle;
         scannerList = new ArrayList<>();
         scannerList.add(new Scanner(System.in));
         chosenScanner = scannerList.get(0);
@@ -60,13 +62,13 @@ public class ClientReader {
         int step = 0;
         while (step < form.size()) {
             try {
-                System.out.println(form.get(step).getLabel() + ". Тип этого значения: " + form.get(step).getExpectedType() + (form.get(step).getIsNecessary() ? ". Обязательное значение" : ". Необязательное значение"));
+                clientManager.app.customizedAlert(form.get(step).getLabel() + bundle.getString("valueType") + form.get(step).getExpectedType() + (form.get(step).getIsNecessary() ? bundle.getString("necessaryValue") : bundle.getString("unnecessaryValue"))).showAndWait();
                 String line = chosenScanner.nextLine().trim();
                 if (line.equals("exit")) {
                     System.exit(0);
                 }
                 if (line.length() == 0 && form.get(step).getIsNecessary()) {
-                    System.out.println("Значение не может быть пустым");
+                    clientManager.app.customizedAlert(bundle.getString("mustNotNull"));
                     continue;
                 } else {
                     if (line.length() == 0) {
@@ -79,7 +81,7 @@ public class ClientReader {
                     case ("Integer"), ("int") -> {
                         int parsedValue = Integer.parseInt(line);
                         if (form.get(step).getKey() == 1 && parsedValue <= -319) {
-                            System.out.println("Значение должно быть больше -319");
+                            clientManager.app.customizedAlert(bundle.getString("mustMoreMinus319"));
                         } else {
                             answers.put(step, parsedValue);
                             step += 1;
@@ -89,7 +91,7 @@ public class ClientReader {
                     case ("long") -> {
                         long parsedValue = Long.parseLong(line);
                         if ((form.get(step).getKey() == 3 || form.get(step).getKey() == 4) && parsedValue <= 0) {
-                            System.out.println("Значение должно быть больше нуля");
+                            clientManager.app.customizedAlert(bundle.getString("mustMore0"));
                         } else {
                             answers.put(step, parsedValue);
                             step += 1;
@@ -102,10 +104,10 @@ public class ClientReader {
                     }
                     case ("String") -> {
                         if ((form.get(step).getKey() == 0 || form.get(step).getKey() == 7 || form.get(step).getKey() == 8) && line.trim().isEmpty()) {
-                            System.out.println("Значение не может быть пустым");
+                            clientManager.app.customizedAlert(bundle.getString("mustNotNull"));
                         } else {
                             if (form.get(step).getKey() == 8 && line.length() < 9) {
-                                System.out.println("Значение должно состоять не менее чем из 9 символов");
+                                clientManager.app.customizedAlert(bundle.getString("mustHaveLenMore9"));
                             } else {
                                 answers.put(step, line);
                                 step += 1;
@@ -129,9 +131,9 @@ public class ClientReader {
                     }
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Введите значение правильного типа данных: " + form.get(step).getExpectedType());
+                clientManager.app.customizedAlert(bundle.getString("inputCorrectType") + form.get(step).getExpectedType());
             } catch (IllegalArgumentException e) {
-                System.out.println("Введите значение из списка допустимых значений ->");
+                clientManager.app.customizedAlert(bundle.getString("inputCorrectValueFromList"));
             }
         }
         return answers;
@@ -140,20 +142,20 @@ public class ClientReader {
     public void readFile(String fileName) {
         try {
             if (!chosenScanner.equals(new Scanner(System.in)) && executedFiles.contains(fileName)) {
-                System.out.println("Рекурсия! Страшнааааа... Но это тоже обработано, уберите запуск одного и того же файла более чем 1 раз в рекурсивной цепочке и продолжайте работу)");
+                clientManager.app.customizedAlert(bundle.getString("fileRecursion"));
                 return;
             } else if (chosenScanner.equals(new Scanner(System.in)) || !executedFiles.contains(fileName)) {
                 File file = new File(fileName);
                 if (!file.exists()){
-                    System.out.println("Файл не существует");
+                    clientManager.app.customizedAlert(bundle.getString("fileDoesNotExist"));
                     return;
                 }
                 if (!file.canRead()){
-                    System.out.println("Файл недоступен для чтения");
+                    clientManager.app.customizedAlert(bundle.getString("fileNotAvailableToRead"));
                     return;
                 }
                 if (!file.canExecute()){
-                    System.out.println("Файл недоступен для исполнения");
+                    clientManager.app.customizedAlert(bundle.getString("fileNotAvailableToExecute"));
                     return;
                 }
                 Path path = Paths.get(fileName);
@@ -163,7 +165,7 @@ public class ClientReader {
                     scannerList.add(new Scanner(path));
                     chosenScanner = scannerList.get(scannerList.size() - 1);
                 } else {
-                    System.out.println("Файл должен быть текстовым");
+                    clientManager.app.customizedAlert(bundle.getString("fileMustHaveTextType"));
                     return;
                 }
             }
@@ -192,4 +194,5 @@ public class ClientReader {
     public void setClientManager(ClientManager clientManager) {
         this.clientManager = clientManager;
     }
+
 }

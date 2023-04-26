@@ -33,14 +33,14 @@ public class FXApplication extends Application implements PropertyChangeListener
     FlowPane localeZone;
     LocationStore locationStore;
     String langShortTag;
+    ResourceBundle bundle;
     String currentSceneName;
-    ClientReader reader = new ClientReader();
+    ClientReader reader = new ClientReader(bundle);
     Writer writer = new Writer();
     int port;
     ClientSerializer clientSerializer;
     int lastMovieId;
     String lastCreator;
-    ResourceBundle bundle;
     String loginMode = "L";
 
 

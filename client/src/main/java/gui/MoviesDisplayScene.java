@@ -91,8 +91,8 @@ public class MoviesDisplayScene {
                     100 - 60*r, 44.0 - 4 * r,
                     100 - 17 * r, 44.0 - 4 * r
             );
-            double posX = Math.max(gridPane.getPrefWidth() / 10 * (0.5 + (Double.parseDouble(row.get(2)) / Math.pow(2, 33))) - 20*k, 0);
-            double posY = Math.max(gridPane.getPrefHeight() / 10 * (0.5 + (Double.parseDouble(row.get(3)) / Math.pow(2, 33))) - 20*k, 0);
+            double posX = Math.min(Math.max(gridPane.getPrefWidth() / 10 * (0.5 + (Math.pow(Double.parseDouble(row.get(2)) / Math.pow(2, 31), 0.9))) - k, 0), 100);
+            double posY = Math.min(Math.max(gridPane.getPrefHeight() / 10 * (0.25 + (Math.pow(Double.parseDouble(row.get(3)) / Math.pow(2, 34), 0.8))) - k, 0), 20);
             star.setFill(colorList.get(colorList.size() - 1));
             star.setStroke(Color.BLACK);
 //            star.setStrokeWidth(2);
