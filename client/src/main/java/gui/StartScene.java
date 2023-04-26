@@ -48,10 +48,8 @@ public class StartScene {
     public Scene openScene() {
         GridPane root = new GridPane();
         root.getChildren().removeAll();
-        System.out.println("openScene: " + mode);
         bundle = app.getBundle();
-//        usernameLabel = new Label(bundle.getString("Username"));
-        usernameLabel = new Label(mode);
+        usernameLabel = new Label(bundle.getString("Username"));
         usernameField = new TextField();
         passwordLabel = new Label(bundle.getString("Password"));
         passwordField = new PasswordField();
@@ -66,7 +64,6 @@ public class StartScene {
         root.add(passwordField, 1, 1);
 
         HBox buttonLayout = new HBox(10);
-        System.out.println(mode);
         if (Objects.equals(mode, "R")){
             buttonLayout.getChildren().add(registration());
         } else {
@@ -75,22 +72,26 @@ public class StartScene {
         root.add(buttonLayout, 1, 2);
         root.add(changeModBtn, 2, 2);
         root.add(retLangButtons(), 0, 3);
-        System.out.println(root.getChildren().size());
-        Scene scene = new Scene(root, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
 
         changeModBtn.setOnAction(e -> {
-            System.out.println("beforeButtonCLick: " + mode);
             mode = (Objects.equals(mode, "L") ? "R" : "L");
-            System.out.println("onButtonCLick: " + mode);
             app.setStartScene(mode);
 //            app.render();
         });
 
+        Button signOutBtn = new Button(bundle.getString("signOut"));
+        signOutBtn.setOnAction(e -> {
+            clientManager.setLogin(null);
+            clientManager.setPassword(null);
+            app.customizedAlert(bundle.getString("success")).showAndWait();
+        });
+        root.add(signOutBtn, 3, 0);
+
+        Scene scene = new Scene(root, 300, 150, Color.rgb(240, 217, 164));  // создание Scene
         return scene;
     }
 
     public Button authorization() {
-        System.out.println("authorization");
         Button loginButton = new Button(bundle.getString("Login"));
         // Set the action for the login button
         loginButton.setOnAction(event -> {
@@ -109,7 +110,6 @@ public class StartScene {
     }
 
     public Button registration()  {
-        System.out.println("registration");
         Button regButton = new Button(bundle.getString("Registration"));
 
         // Set the action for the login button
@@ -153,7 +153,6 @@ public class StartScene {
         while (response == null || !app.clientSerializer.isReadyToReturnMessage()) {
             response = app.clientSerializer.getNewResponse();
         }
-        System.out.println("got data");
         app.clientSerializer.setReadyToReturnMessage(false);
     }
 

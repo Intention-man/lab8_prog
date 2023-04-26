@@ -23,10 +23,7 @@ import javafx.util.Duration;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class MoviesDisplayScene {
     FXApplication app;
@@ -40,7 +37,6 @@ public class MoviesDisplayScene {
     }
 
     public Scene openScene() throws SQLException {
-//        clientManager.startNewAction("login 88 88");
         response = null;
         clientManager.commandsWithoutParam("getAllMoviesRS");
         while (response == null || !app.clientSerializer.isReadyToReturnMessage()){
@@ -58,6 +54,7 @@ public class MoviesDisplayScene {
 
         String lastCreator = "";
         List<Color> colorList = new ArrayList<>();
+        HashMap<String, Color> map = new HashMap<>();
         while (resultSet.next()) {
             ObservableList<String> row = FXCollections.observableArrayList();
             for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
@@ -67,17 +64,26 @@ public class MoviesDisplayScene {
             if (!Objects.equals(row.get(row.size() - 1), lastCreator)) {
                 lastCreator = row.get(row.size() - 1);
                 Color newColor;
-                do {
-                    newColor = Color.rgb((int) Math.round(30 + (Math.random() * 225)), (int) Math.round(30 + (Math.random() * 225)), (int) Math.round(30 + (Math.random() * 225)));
-                } while (colorList.contains(newColor));
-                colorList.add(newColor);
+                if (!map.containsKey(lastCreator)){
+
+                    do {
+                        newColor = Color.rgb((int) Math.round(30 + (Math.random() * 225)), (int) Math.round(30 + (Math.random() * 225)), (int) Math.round(30 + (Math.random() * 225)));
+                    } while (colorList.contains(newColor));
+                    colorList.add(newColor);
+                    map.put(lastCreator, newColor);
+                } else {
+                    newColor = map.get(lastCreator);
+                }
             }
 //            System.out.println(gridPane.getPrefWidth() + " " + gridPane.getPrefHeight());
-            root = new FlowPane(Orientation.VERTICAL, 30.0, 30.0, app.navigateButtonList());
+            root = new FlowPane(Orientation.VERTICAL, 30.0, 30.0);
+            root.setPrefWidth(1000);
+            root.setPrefHeight(500);
+            root.getChildren().add(app.navigateButtonList());
             Polygon star = new Polygon();
 //            center = 100, 44
             double k = Long.parseLong(row.get(6)) / Math.pow(2, 64);
-            double r = 0.7 + k * 8;
+            double r = Math.min(0.5 + k * 8, 0.81);
 //            System.out.println(r);
             star.getPoints().addAll(
                     100.0, 44 - 44 * r,
@@ -91,9 +97,9 @@ public class MoviesDisplayScene {
                     100 - 60*r, 44.0 - 4 * r,
                     100 - 17 * r, 44.0 - 4 * r
             );
-            double posX = Math.min(Math.max(gridPane.getPrefWidth() / 10 * (0.5 + (Math.pow(Double.parseDouble(row.get(2)) / Math.pow(2, 31), 0.9))) - k, 0), 100);
+            double posX = Math.min(Math.max(gridPane.getPrefWidth() / 10 * (0.5 + (Math.pow(Double.parseDouble(row.get(2)) / Math.pow(2, 31), 0.9))) - k, 0), 75);
             double posY = Math.min(Math.max(gridPane.getPrefHeight() / 10 * (0.25 + (Math.pow(Double.parseDouble(row.get(3)) / Math.pow(2, 34), 0.8))) - k, 0), 20);
-            star.setFill(colorList.get(colorList.size() - 1));
+            star.setFill(map.get(lastCreator));
             star.setStroke(Color.BLACK);
 //            star.setStrokeWidth(2);
 //            root.getChildren().add(star);
@@ -113,9 +119,10 @@ public class MoviesDisplayScene {
             });
 
             gridPane.add(stackPane, (int) posX, (int) posY);
-            System.out.println(Arrays.asList((int) posX, (int) posY));
+//            System.out.println(Arrays.asList((int) posX, (int) posY));
         }
+//        gridPane.setGridLinesVisible(true);
         root.getChildren().add(gridPane);
-        return new Scene(root, 300, 150, Color.rgb(240, 217, 164));
+        return new Scene(root, 300, 150, Color.GREEN);
     }
 }

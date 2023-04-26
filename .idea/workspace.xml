@@ -4,16 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="All pages work">
+    <list default="true" id="61974b51-3d42-4871-9961-ec533b1954c2" name="Changes" comment="Almost all">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/functional_classes/ClientManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/FXApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/gui/StartScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_HR.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_HR.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_NL.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_NL.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_en_NZE.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_en_NZE.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/resources/Gui_ru_RU.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/Gui_ru_RU.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/functional_classes/commands_executors/CollectionAnalyzer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +95,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.ClientMain">
     <configuration name="ClientMain" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <envs>
         <env name="url" value="&quot;jdbc:postgresql://localhost:5000/postgres&quot;" />
@@ -213,6 +215,8 @@
       <workItem from="1682357089521" duration="4341000" />
       <workItem from="1682398456212" duration="1285000" />
       <workItem from="1682447434488" duration="1384000" />
+      <workItem from="1682485305620" duration="3450000" />
+      <workItem from="1682492429077" duration="3494000" />
     </task>
     <task id="LOCAL-00001" summary="Added JDBC driver dependency">
       <created>1678457588345</created>
@@ -340,7 +344,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682358006790</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Almost all">
+      <created>1682485582592</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1682485582592</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -370,28 +381,38 @@
     <MESSAGE value="Observer (something happens)" />
     <MESSAGE value="1) Observer finished&#10;2) StartForm finished (or almost)&#10;3) Locals are being developed" />
     <MESSAGE value="Locals are being developed (part 2)" />
-    <MESSAGE value="Almost all" />
     <MESSAGE value="Finished locals" />
     <MESSAGE value="All pages work" />
-    <option name="LAST_COMMIT_MESSAGE" value="All pages work" />
+    <MESSAGE value="Almost all" />
+    <option name="LAST_COMMIT_MESSAGE" value="Almost all" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java</url>
-          <line>344</line>
+          <line>348</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java</url>
-          <line>355</line>
+          <line>359</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/client/src/main/java/gui/CommandsScene.java</url>
-          <line>369</line>
+          <line>373</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java</url>
+          <line>120</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/client/src/main/java/gui/MoviesDisplayScene.java</url>
+          <line>121</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

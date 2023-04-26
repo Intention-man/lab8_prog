@@ -134,10 +134,10 @@ public class CollectionAnalyzer {
     public String info() {
         System.out.println("info!!!");
         ArrayList<String> answer = new ArrayList<>();
-        answer.add("Collection class:" + (movies.getMoviesList().size() > 0 ? movies.getMoviesList().stream().toList().get(0).getClass() : "Movie"));
-        answer.add("Initial date and time" + movies.getInitializationDate());
-        answer.add("Count: " + movies.moviesCount());
-        answer.add("List (id + name)");
+        answer.add("/collectionClass/" + (movies.getMoviesList().size() > 0 ? movies.getMoviesList().stream().toList().get(0).getClass() : "Movie"));
+        answer.add("/initialDateTime/" + movies.getInitializationDate());
+        answer.add("/count/" + movies.moviesCount());
+        answer.add("/ListIdName/");
         movies.getSortedMovies("name")
                 .forEach(movie -> answer.add(movie.getId() + " - " + movie.getName()));
         StringBuilder message = new StringBuilder();

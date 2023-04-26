@@ -279,11 +279,21 @@ public class ClientManager {
         return null;
     }
 
+    public void startReadFile(String fileName) {
+        clientReader.readFile(fileName);
+    }
+
     public String getLogin() {
         return login;
     }
 
-    public void startReadFile(String fileName) {
-        clientReader.readFile(fileName);
+    public void setLogin(String login) {
+        this.login = login;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 }

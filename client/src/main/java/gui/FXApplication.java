@@ -74,7 +74,7 @@ public class FXApplication extends Application implements PropertyChangeListener
         this.primaryStage = primaryStage;
         primaryStage.setX(20);
         primaryStage.setY(20);
-        primaryStage.setWidth(1000);
+        primaryStage.setWidth(1200);
         primaryStage.setHeight(600);
         currentScene = setStartScene("L");
         InputStream iconStream = getClass().getResourceAsStream("/images/river.jpg");

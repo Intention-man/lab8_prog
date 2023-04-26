@@ -7,7 +7,6 @@ import enums.MovieGenre;
 import enums.MpaaRating;
 import functional_classes.ClientManager;
 import functional_classes.ClientReader;
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,10 +17,6 @@ import movies_classes.Movie;
 import movies_classes.Movies;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.ResultSet;
 import java.util.*;
 import java.util.List;
 
@@ -218,7 +213,16 @@ public class  CommandsScene {
         button.setOnAction(e -> {
             clientManager.noRSCommands("info");
             updateResponseData();
-            app.customizedAlert(response.getResponseData().toString()).showAndWait();
+            List<String> list = List.of(response.getResponseData().toString().split("/"));
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < list.size(); i++) {
+                if (i < 8 && bundle.containsKey(list.get(i))){
+                    stringBuilder.append(bundle.getString(list.get(i)) + " ");
+                } else {
+                    stringBuilder.append(list.get(i) + " ");
+                }
+            }
+            app.customizedAlert(stringBuilder.toString()).showAndWait();
         });
         return button;
     }
